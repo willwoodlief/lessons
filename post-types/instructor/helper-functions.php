@@ -115,7 +115,7 @@ if ( ! function_exists( 'eltdf_lms_single_instructor_tabs' ) ) {
 		
 		// Curriculum tab - shows instructor curriculum
 		$tabs['curriculum'] = array(
-			'title'    => __( 'Curriculum', 'eltdf-lms' ),
+			'title'    => __( 'Lessons', 'eltdf-lms' ),
 			'icon'     => '<i class="lnr lnr-bookmark" aria-hidden="true"></i>',
 			'priority' => 20,
 			'template' => 'content'
