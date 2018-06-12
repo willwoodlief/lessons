@@ -1,15 +1,35 @@
 <?php
 $course_sections = get_post_meta( get_the_ID(), 'eltdf_course_curriculum', true );
-if ( ! empty( $course_sections ) ) { ?>
+if ( ! empty( $course_sections ) ) {
+	$unlocks = ecomhub_fi_user_section_progress();
+	$section_counter = 0;
+    ?>
 	<div class="eltdf-course-popup-items">
 		<div class="eltdf-course-popup-items-list">
 			<?php foreach ( $course_sections as $course_section ) { ?>
-				<div class="eltdf-popup-items-section">
+				<div class="eltdf-popup-items-section"
+					<?php if ( ($unlocks['last_unlocked_section'] >= 0) && ($section_counter > $unlocks['last_unlocked_section'])) { ?>
+                         style="background-color: lightgrey"
+                    <?php } ?>
+                > <!--todo  head of section -->
+					<?php if ( ($unlocks['last_unlocked_section'] >= 0) && ($section_counter > $unlocks['last_unlocked_section'])) { ?>
+
+                        <div class="ecomhub-fi-locked-description" style="z-index 999999;width: 20%;height: 20%; margin: 2em;  float:left ">
+                            <div style="text-align: center">
+                                <span class="ecomhub-fi-lock-image fa fa-lock" style="color:#3A4242;font-size: 3em"></span>
+                                <br>
+                                <span class="ecomhub-fi-lock-human-span" style="color: black"><?= $unlocks['human'] ?></span>
+                            </div>
+                        </div>
+						<?php
+					}
+
+					?>
 					<h4 class="eltdf-section-name">
 						<?php echo esc_html( $course_section['section_name'] ) ?>
 					</h4>
 					<h5 class="eltdf-section-title">
-						<?php echo esc_html( $course_section['section_title'] ) ?>!
+						<?php echo esc_html( $course_section['section_title'] ) ?>
 					</h5>
 					<div class="eltdf-section-content">
 						<?php
@@ -38,7 +58,8 @@ if ( ! empty( $course_sections ) ) { ?>
 												<span class="eltdf-element-label">
                                                     <?php echo esc_attr( $element['label'] ); ?>
                                                 </span>
-												<?php if ( eltdf_lms_course_is_preview_available( $element['id'] ) ) { ?>
+                                                <!-- todo preview course link in popup -->
+												<?php if ( eltdf_lms_course_is_preview_available( $element['id'] ) && ( ($unlocks['last_unlocked_section'] >= 0) && ($section_counter <= $unlocks['last_unlocked_section'])) ) { ?>
 													<a class="eltdf-element-name eltdf-element-link-open" itemprop="url" href="<?php echo esc_attr( $element['url'] ); ?>" title="<?php echo esc_attr( $element['title'] ); ?>" data-item-id="<?php echo esc_attr( $element['id'] ); ?>" data-course-id="<?php echo get_the_ID(); ?>">
 														<?php echo esc_html( $element['title'] ); ?>
 														<?php if ( ! eltdf_lms_user_has_course() || ! eltdf_lms_user_completed_prerequired_course() ) { ?>
@@ -56,7 +77,9 @@ if ( ! empty( $course_sections ) ) { ?>
 						<?php } ?>
 					</div>
 				</div>
-			<?php } ?>
+			<?php
+				$section_counter ++;
+			} ?>
 		</div>
 	</div>
 <?php } ?>

@@ -403,12 +403,19 @@ if ( ! function_exists( 'eltdf_lms_course_add_users_to_course' ) ) {
 					
 					eltdf_lms_set_user_courses_status( $user_status_new_values );
 				}
+
+				//todo add user start time here
+				$start_times = get_user_meta( get_current_user_id(), 'ecomhub_fi_user_start_course', true );
+				if (!$start_times) {
+					$start_times = [];
+				}
+				$start_times[$product_id] = time();
+				update_user_meta( get_current_user_id(), 'ecomhub_fi_user_start_course', $start_times );
 			}
 		}
 	}
 	
 	add_action( 'woocommerce_order_status_completed', 'eltdf_lms_course_add_users_to_course', 10, 1 );
-//	add_action( 'woocommerce_payment_complete_order_status_completed', 'eltdf_lms_course_add_users_to_course', 10, 1 ); //todo changed will
 
 }
 
@@ -537,6 +544,8 @@ if ( ! function_exists( 'eltdf_lms_get_items_load' ) ) {
 }
 
 if ( ! function_exists( 'eltdf_lms_load_element_item' ) ) {
+	//todo pages are loaded here
+	// todo add in blocking from ajax
 	function eltdf_lms_load_element_item() {
 		
 		if ( isset( $_POST ) && isset( $_POST['item_id'] ) ) {
@@ -803,6 +812,38 @@ if ( ! function_exists( 'eltdf_lms_course_items_list_array' ) ) {
 		}
 		
 		return $elements_keys;
+	}
+}
+
+if ( ! function_exists( 'ecomhub_fi_course_items_section_lookup' ) ) {
+	/**
+	 * @param string $id
+	 *
+	 * @return array (lesson id => section index 0 based)
+	 */
+	function ecomhub_fi_course_items_section_lookup( $id = '' ) {
+		$course_id       = ( $id != '' ? $id : get_the_ID() );
+		$course_sections = get_post_meta( $course_id, 'eltdf_course_curriculum', true );
+		$lookup = [];
+
+		if ( ! empty( $course_sections ) ) {
+			$section_count = 0;
+			foreach ( $course_sections as $course_section ) {
+				$section_elements = $course_section['section_elements'];
+				if ( ! empty( $section_elements ) ) {
+
+					$list     = eltdf_lms_get_course_curriculum_list( $section_elements );
+					$elements = $list['elements'];
+
+					foreach ( $elements as $element ) {
+						$lookup[$element['id']] = $section_count;
+					}
+				}
+				$section_count ++;
+			}
+		}
+
+		return $lookup;
 	}
 }
 
@@ -1278,7 +1319,7 @@ if ( ! function_exists( 'eltdf_lms_override_breadcrumbs' ) ) {
 			$childContent = '';
 			$terms        = get_terms( 'course-category' );
 			$curent_term  = get_queried_object()->term_id;
-			// @TODO Optimize function by using get_term_parents_list()  that is included in wp 4.8 version
+			// @TO DO Optimize function by using get_term_parents_list()  that is included in wp 4.8 version
 			foreach ( $terms as $term ) {
 				if ( $term->term_id == $curent_term ) {
 					$cat  = $term;

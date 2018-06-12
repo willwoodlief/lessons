@@ -50,6 +50,64 @@ if ( ! function_exists( 'eltdf_lms_get_user_orders' ) ) {
 	}
 }
 
+if ( ! function_exists( 'ecomhub_fi_user_section_progress' ) ) {
+
+	/**
+	 * returns 0 based index of section unlocked, as well as the seconds until next unlock
+	 * @param string $id
+	 *
+	 * @return array (last_unlocked_section, next_unlock_span)
+	 */
+	function ecomhub_fi_user_section_progress( $id = '' ) {
+		$id               = $id === '' ? get_the_ID() : $id;
+		if (!get_current_user_id()) {
+			return ['last_unlocked_section' => -1,'next_unlock_span' => null, 'human' => 'Not Registered'];
+		}
+		$start_times = get_user_meta( get_current_user_id(), 'ecomhub_fi_user_start_course', true );
+		if (!$start_times) {
+			$start_times = [];
+		}
+
+		if (array_key_exists($id,$start_times)) {
+			$start = $start_times[$id];
+			$now = time();
+			$diff = $now - $start;
+			$time_per_section = (60*60 * 24 * 6) + (60*60*4); // 24*6 + 4 days and hours
+			$section = intval(floor($diff / $time_per_section));
+			$left_over = fmod($diff,$time_per_section);
+			$next_time_unlock = ($section +1) * $time_per_section;
+			$wait_remaining =  $next_time_unlock - $left_over;
+
+			//get human time span
+			//rules
+			// if greater than one day , put out number of days
+			// if less than a day, put out number of hours
+			// hh:mm:ss on the last hour
+			// count down timer: MM:SS on the last minute
+			//
+			if ($wait_remaining > 60*60*24 * 2) {
+				$days = intval(floor($wait_remaining/(60*60*24)));
+				$human = "$days Days";
+			} elseif ($wait_remaining > 60*60*24 * 1) {
+				$human = "1 Day";
+			} elseif ($wait_remaining > 60*60*24 ) {
+				//hours and minutes
+				$hours = intval(floor($wait_remaining/(60*60)));
+				$minutes = intval(floor($wait_remaining- ($hours*60*60)/60));
+				$human = "$hours Hours $minutes $minutes";
+			} else {
+				//minutes and seconds if just an hour
+				$minutes = intval(floor($wait_remaining/60));
+				$seconds = intval(floor($wait_remaining-($minutes*60)));
+				$human = "$minutes Minutes $seconds Seconds";
+			}
+			return ['last_unlocked_section' => $section,'next_unlock_span' => $wait_remaining, 'human' => $human];
+		} else {
+			return ['last_unlocked_section' => -1,'next_unlock_span' => null, 'human' => 'Not Registered'];
+		}
+	}
+}
+
 if ( ! function_exists( 'eltdf_lms_user_has_course' ) ) {
 	function eltdf_lms_user_has_course( $id = '' ) {
 		$id               = $id === '' ? get_the_ID() : $id;
@@ -67,6 +125,19 @@ if ( ! function_exists( 'eltdf_lms_user_has_course' ) ) {
 				// changed by will, when purchased through the rest api of woo, this will not be a Item Course
 				//	if ( is_a( $item, 'WC_Order_Item_Course' ) && $product_id == $id && $order_completed ) {
 				if (  $product_id == $id && $order_completed ) {
+
+					//check to make sure they have a timestamp for the course
+					$start_times = get_user_meta( get_current_user_id(), 'ecomhub_fi_user_start_course', true );
+					if (!$start_times) {
+						$start_times = [];
+					}
+
+					if (!array_key_exists($product_id,$start_times)) {
+						$start_times[$product_id] = time();
+						update_user_meta( get_current_user_id(), 'ecomhub_fi_user_start_course', $start_times );
+					}
+
+
 					// end changes by will
 					return true;
 				}
