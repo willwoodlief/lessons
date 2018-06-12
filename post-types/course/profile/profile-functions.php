@@ -93,7 +93,7 @@ if ( ! function_exists( 'ecomhub_fi_user_section_progress' ) ) {
 				// count down timer: MM:SS on the last minute
 				//
 				if ($new_wait > 60*60*24  * 7 *2) {
-					$weeks = intval(floor($new_wait/(60*60*24*7)));
+					$weeks = intval(ceil($new_wait/(60*60*24*7)));
 					$human = "$weeks Weeks";
 				}
 				  elseif ($new_wait > 60*60*24 * 2) {
