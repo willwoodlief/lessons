@@ -78,30 +78,44 @@ if ( ! function_exists( 'ecomhub_fi_user_section_progress' ) ) {
 			$next_time_unlock = ($section +1) * $time_per_section;
 			$wait_remaining =  $next_time_unlock - $left_over;
 
-			//get human time span
-			//rules
-			// if greater than one day , put out number of days
-			// if less than a day, put out number of hours
-			// hh:mm:ss on the last hour
-			// count down timer: MM:SS on the last minute
-			//
-			if ($wait_remaining > 60*60*24 * 2) {
-				$days = intval(floor($wait_remaining/(60*60*24)));
-				$human = "$days Days";
-			} elseif ($wait_remaining > 60*60*24 * 1) {
-				$human = "1 Day";
-			} elseif ($wait_remaining > 60*60*24 ) {
-				//hours and minutes
-				$hours = intval(floor($wait_remaining/(60*60)));
-				$minutes = intval(floor($wait_remaining- ($hours*60*60)/60));
-				$human = "$hours Hours $minutes $minutes";
-			} else {
-				//minutes and seconds if just an hour
-				$minutes = intval(floor($wait_remaining/60));
-				$seconds = intval(floor($wait_remaining-($minutes*60)));
-				$human = "$minutes Minutes $seconds Seconds";
+
+
+			//add in lookup array of human wait times
+			$human_lookup = [];
+			for($u = 0; $u < 100; $u++) {
+				$new_wait = $wait_remaining + ($u * $time_per_section);
+
+				//get human time span
+				//rules
+				// if greater than one day , put out number of days
+				// if less than a day, put out number of hours
+				// hh:mm:ss on the last hour
+				// count down timer: MM:SS on the last minute
+				//
+				if ($new_wait > 60*60*24  * 7 *2) {
+					$weeks = intval(floor($new_wait/(60*60*24*7)));
+					$human = "$weeks Weeks";
+				}
+				  elseif ($new_wait > 60*60*24 * 2) {
+					$days = intval(floor($new_wait/(60*60*24)));
+					$human = "$days Days";
+				} elseif ($new_wait > 60*60*24 * 1) {
+					$human = "1 Day";
+				} elseif ($new_wait > 60*60*24 ) {
+					//hours and minutes
+					$hours = intval(floor($new_wait/(60*60)));
+					$minutes = intval(floor($new_wait- ($hours*60*60)/60));
+					$human = "$hours Hours $minutes $minutes";
+				} else {
+					//minutes and seconds if just an hour
+					$minutes = intval(floor($new_wait/60));
+					$seconds = intval(floor($new_wait-($minutes*60)));
+					$human = "$minutes Minutes $seconds Seconds";
+				}
+				$human_lookup[$u] = $human;
+
 			}
-			return ['last_unlocked_section' => $section,'next_unlock_span' => $wait_remaining, 'human' => $human];
+			return ['last_unlocked_section' => $section,'next_unlock_span' => $wait_remaining, 'human' => $human_lookup];
 		} else {
 			return ['last_unlocked_section' => -1,'next_unlock_span' => null, 'human' => 'Not Registered'];
 		}

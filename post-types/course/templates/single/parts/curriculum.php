@@ -19,7 +19,7 @@ if(!empty($course_sections)) {
                             <div style="text-align: center">
                                 <span class="ecomhub-fi-lock-image fa fa-lock" style="color:#3A4242;font-size: 3em"></span>
                                 <br>
-                                <span class="ecomhub-fi-lock-human-span" style="color: black"><?= $unlocks['human'] ?></span>
+                                <span class="ecomhub-fi-lock-human-span" style="color: black"><?= $unlocks['human'][$section_counter] ?></span>
                             </div>
                         </div>
                     <?php
