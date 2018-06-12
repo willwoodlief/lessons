@@ -1,0 +1,46 @@
+/* ==========================================================================
+   Course Item Layout - Simple style - begin
+   ========================================================================== */
+
+.eltdf-course-list-holder {
+	
+	&.eltdf-cl-simple {
+		
+		article {
+			
+			@media only screen and (min-width: $ipad-landscape-plus-pixel) {
+				
+				.eltdf-cl-item-inner {
+					display: -webkit-box;
+					display: -webkit-flex;
+					display: -ms-flexbox;
+					display: flex;
+					-webkit-flex-wrap: wrap;
+					-ms-flex-wrap: wrap;
+					flex-wrap: wrap;
+				}
+				
+				.eltdf-cli-image,
+				.eltdf-cli-text-holder {
+					width: 50%;
+					-ms-flex: 1; /* IE 10 */
+				}
+				
+				.eltdf-cli-text-inner,
+				.eltdf-cli-text-inner-2 {
+					height: 100%;
+				}
+				
+				.eltdf-cli-bottom-info {
+					position: absolute;
+					left: 0;
+					bottom: 0;
+				}
+			}
+		}
+	}
+}
+
+/* ==========================================================================
+   Course Item Layout - Simple style - end
+   ========================================================================== */

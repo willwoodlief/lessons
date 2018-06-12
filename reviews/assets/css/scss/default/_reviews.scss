@@ -1,0 +1,28 @@
+.eltdf-comment-rating-box {
+	position: relative;
+	display: inline-block;
+	vertical-align: top;
+	line-height: 1;
+	
+	.eltdf-star-rating {
+		position: relative;
+		display: inline-block;
+		vertical-align: top;
+		font-family: 'ElegantIcons';
+		color: #c8c8c8;
+		font-size: 14px;
+		line-height: 24px;
+		letter-spacing: 5px;
+		cursor: pointer;
+		overflow: hidden;
+		@include eltdfTransition(all 0.3s ease);
+		
+		&.active {
+			color: #ffcc00;
+		}
+		
+		&:before {
+			content: '\e033';
+		}
+	}
+}

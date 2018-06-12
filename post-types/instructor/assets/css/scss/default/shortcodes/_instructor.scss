@@ -1,0 +1,74 @@
+/* ==========================================================================
+# Instructor list - begin
+	========================================================================== */
+
+.eltdf-instructor-item-holder {
+    @include eltdfRelativeHolderLayout();
+    
+    .eltdf-instructor {
+        @include eltdfRelativeHolderLayout();
+        box-sizing: border-box;
+    }
+    
+    .eltdf-instructor-image {
+        @include eltdfRelativeHolderLayout();
+	    
+	    > a {
+		    position: relative;
+		    display: block;
+	    }
+        
+        img {
+            display: block;
+        }
+    }
+    
+    .eltdf-instructor-info {
+        @include eltdfRelativeHolderLayout();
+        margin: 29px 0 0;
+    }
+    
+    .eltdf-instructor-name {
+        margin: 0;
+    }
+    
+    .eltdf-instructor-position {
+        margin: 6px 0 0;
+        color: #b9b9b9;
+    }
+    
+    .eltdf-instructor-text {
+        margin: 16px 0 0;
+        
+        p {
+            margin: 0;
+        }
+    }
+    
+    .eltdf-instructor-social {
+        @include eltdfRelativeHolderLayout();
+        margin: 32px 0 0;
+    
+        .eltdf-icon-shortcode {
+            font-size: 12px;
+            margin: 0 5px;
+        
+            a {
+                color: #b9b9b9;
+            
+                &:hover {
+                    color: $default-heading-color;
+                }
+            }
+        }
+    
+        .eltdf-icon-element {
+            font-size: inherit;
+            @include eltdfTransition(none);
+        }
+    }
+}
+
+/* ==========================================================================
+# Instructor list - end
+========================================================================== */

@@ -1,0 +1,49 @@
+/* ==========================================================================
+   Course Item Layout - Standard style - begin
+   ========================================================================== */
+
+.eltdf-course-list-holder {
+	
+	&.eltdf-cl-standard {
+		
+		article {
+			
+			.eltdf-cli-image {
+				
+				img {
+					border-radius: 6px 6px 0 0;
+				}
+			}
+			
+			.eltdf-cli-text-holder {
+				padding: 26px 20px 28px;
+				background-color: #fff;
+				border-radius: 0 0 6px 6px;
+				box-sizing: border-box;
+				margin-top: -4px;
+			}
+			
+			.eltdf-cli-excerpt {
+				margin-top: 7px;
+			}
+			
+			.eltdf-cli-top-info {
+				vertical-align: top;
+				margin-top: 2px;
+			}
+			
+			.eltdf-cli-bottom-info {
+				margin-top: 22px;
+				padding-top: 25px;
+				border-top: 1px solid $default-border-color;
+				
+				@include laptop-landscape-medium {
+					font-size: 11px;
+				}
+			}
+		}
+	}
+}
+/* ==========================================================================
+   Course Item Layout - Standard style - end
+   ========================================================================== */

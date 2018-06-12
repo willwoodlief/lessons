@@ -1,0 +1,70 @@
+/* ==========================================================================
+   Course Table shortcode responsive style - begin
+   ========================================================================== */
+
+.eltdf-course-table-holder {
+
+	@include laptop-landscape-medium {
+		
+		.eltdf-cti-instructor {
+			
+			.eltdf-instructor-image {
+				margin-right: 10px;
+			}
+		}
+	}
+	
+	@include ipad-landscape {
+		
+		.eltdf-cti-instructor {
+			
+			.eltdf-instructor-image {
+				display: none;
+				margin-right: 0;
+			}
+		}
+		
+		.eltdf-cti-price {
+			
+			.eltdf-btn {
+				padding: 8px 26px;
+			}
+		}
+	}
+	
+	@include ipad-portrait {
+		
+		.eltdf-ct-headings-inner {
+			display: none;
+		}
+		
+		.eltdf-ct-headings-mobile {
+			display: inline-block;
+		}
+		
+		.eltdf-ct-item-inner {
+			
+			> * {
+				width: 50%;
+				
+				&:nth-child(2n+1) {
+					clear: both;
+				}
+			}
+		}
+	}
+	
+	@include phone-landscape {
+		
+		.eltdf-ct-item-inner {
+			
+			> * {
+				width: 100%;
+			}
+		}
+	}
+}
+
+/* ==========================================================================
+   Course Table shortcode responsive style - end
+   ========================================================================== */

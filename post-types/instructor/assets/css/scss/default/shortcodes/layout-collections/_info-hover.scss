@@ -1,0 +1,33 @@
+/* ==========================================================================
+# Instructor info hover - begin
+	========================================================================== */
+
+.eltdf-instructor {
+    
+    &.info-hover {
+    
+        .touch & {
+            cursor: pointer;
+        }
+    
+        &:hover {
+        
+            .eltdf-instructor-info-wrapper {
+                opacity: 1;
+            }
+        
+            .eltdf-instructor-info-tc {
+                @include eltdfTransitionTransform(.45s cubic-bezier(0.64, 0.01, 0.15, 1.16), opacity .5s);
+                @include eltdfTransform(translate3d(0,0,0));
+            }
+        }
+    
+        .eltdf-instructor-social {
+            margin: 7px 0 0;
+        }
+    }
+}
+
+/* ==========================================================================
+# Instructor info bellow - end
+	========================================================================== */

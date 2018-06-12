@@ -1,0 +1,68 @@
+/* ==========================================================================
+   Instructor list shortcode responsive style - begin
+   ========================================================================== */
+
+@include laptop-landscape {
+	
+	.eltdf-instructor-list-holder {
+
+        $gallery_columns_number: ('four', 'five');
+
+        @for $i from 0 to length($gallery_columns_number) {
+            &.eltdf-tl-#{nth($gallery_columns_number,$i+1)}-columns {
+                $gallery_item_size: 100% / 3;
+
+                .eltdf-instructor {
+                    width: $gallery_item_size;
+                }
+
+                @media only screen and (min-width: $ipad-landscape-plus-pixel) {
+
+                    .eltdf-instructor {
+
+                        &:nth-child(3n+1) {
+                            clear: both;
+                        }
+                    }
+                }
+            }
+        }
+	}
+}
+
+@include ipad-landscape {
+	
+	.eltdf-instructor-list-holder {
+
+        $gallery_columns_number: ('three', 'four', 'five');
+
+        @for $i from 0 to length($gallery_columns_number) {
+            &.eltdf-tl-#{nth($gallery_columns_number,$i+1)}-columns {
+
+                .eltdf-instructor {
+                    width: 50%;
+                }
+
+                @media only screen and (min-width: $phone-landscape-plus-pixel) {
+
+                    .eltdf-instructor {
+
+                        &:nth-child(2n+1) {
+                            clear: both;
+                        }
+                    }
+                }
+            }
+        }
+	}
+}
+
+@include phone-landscape {
+	
+	.eltdf-instructor-list-holder .eltdf-tl-inner .eltdf-instructor {
+		width: 100%;
+	}
+}
+/* ==========================================================================
+   Instructor list shortcode responsive style - end
+   ========================================================================== */

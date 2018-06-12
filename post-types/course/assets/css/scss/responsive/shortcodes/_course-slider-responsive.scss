@@ -1,0 +1,65 @@
+
+
+  .eltdf-course-slider-holder {
+      .eltdf-course-list-holder {
+          .owl-nav {
+
+              @include laptop-landscape-large {
+                  .owl-prev {
+                      &:hover {
+                          left: -52px !important;
+                      }
+                  }
+
+                  .owl-next {
+                      &:hover {
+                        right: -52px !important;
+                      }
+                  }
+              }
+
+              @include laptop-landscape-medium {
+                  .owl-prev {
+                      &:hover {
+                          left: -67px !important;
+                      }
+                  }
+
+                  .owl-next {
+                      &:hover {
+                          right: -67px !important;
+                      }
+                  }
+              }
+
+
+              @include ipad-landscape {
+                  .owl-prev {
+                      &:hover {
+                          left: -100px !important;
+                      }
+                  }
+
+                  .owl-next {
+                      &:hover {
+                          right: -100px !important;
+                      }
+                  }
+              }
+
+              @include ipad-portrait{
+                  .owl-prev {
+                      &:hover {
+                          left: -63px !important;
+                      }
+                  }
+
+                  .owl-next {
+                      &:hover {
+                          right: -63px !important;
+                      }
+                  }
+              }
+          }
+      }
+  }

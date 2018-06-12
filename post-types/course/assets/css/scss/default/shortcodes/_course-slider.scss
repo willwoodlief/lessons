@@ -1,0 +1,315 @@
+/* ==========================================================================
+   Course Slider shortcode style - begin
+   ========================================================================== */
+
+.eltdf-course-slider-holder {
+    @include eltdfRelativeHolderLayout();
+	
+	&.eltdf-course-slider-simple {
+		
+		.eltdf-course-list-holder article {
+			
+			.eltdf-cl-item-inner {
+				display: -webkit-box;
+				display: -webkit-flex;
+				display: -ms-flexbox;
+				display: flex;
+				-webkit-flex-wrap: wrap;
+				-ms-flex-wrap: wrap;
+				flex-wrap: wrap;
+				-webkit-flex-direction: row-reverse;
+				flex-direction: row-reverse;
+				
+				@include ipad-landscape {
+					display: block;
+				}
+			}
+			
+			.eltdf-cli-image {
+				width: 50%;
+				-ms-flex: 1; /* IE 10 */
+				
+				img {
+					border-radius: 6px;
+				}
+				
+				@include ipad-landscape {
+					display: block;
+					width: 100%;
+				}
+			}
+			
+			.eltdf-cli-text-holder {
+				width: 50%;
+				padding: 55px 93px 30px 63px;
+				text-align: left;
+				-ms-flex: 1; /* IE 10 */
+				
+				.eltdf-cli-bottom-info {
+					margin-top: 74px;
+				}
+				
+				@include laptop-landscape-medium {
+					padding: 55px 63px 30px 43px;
+					
+					.eltdf-cli-bottom-info {
+						margin-top: 33px;
+					}
+				}
+				
+				@include ipad-landscape {
+					display: block;
+					width: 100%;
+					padding: 70px 40px 30px;
+				}
+			}
+			
+			.eltdf-cli-text-inner {
+				display: table;
+				width: 100%;
+				height: 100%;
+			}
+			
+			.eltdf-cli-text-inner-2 {
+				display: table-cell;
+				vertical-align: bottom;
+				width: 100%;
+				height: 100%;
+			}
+			
+			.eltdf-cli-category-holder {
+				top: -25px;
+				left: 0;
+			}
+			
+			.eltdf-cli-top-info {
+				margin-top: 5px;
+				font-size: 22px;
+				line-height: 36px;
+			}
+			
+			.eltdf-cli-excerpt {
+				margin-top: 17px;
+			}
+		}
+	}
+	
+	.eltdf-cl-inner {
+		margin: 0 !important;
+		
+		&.eltdf-grid {
+			margin: 0 auto !important;
+		}
+
+		.owl-nav {
+
+			.owl-prev {
+				border-radius: 0 100px 100px 0;
+				@include eltdfTransition(left .3s ease, color .2s ease-out,background-color .2s ease-out);
+
+				> span {
+					padding-left: 33px;
+				}
+
+				&:hover {
+					left: -280px !important;
+				}
+			}
+
+			.owl-next {
+				border-radius: 100px 0 0 100px;
+				@include eltdfTransition(right .3s ease, color .2s ease-out,background-color .2s ease-out);
+
+				> span {
+					padding-right: 33px;
+				}
+
+				&:hover {
+					right: -280px !important;
+				}
+			}
+		}
+
+
+	}
+	
+	article {
+		width: auto !important;
+		padding: 0 !important;
+		margin: 0 !important;
+		float: none !important;
+		
+		.eltdf-cli-category-holder {
+			position: absolute;
+			top: 20px;
+			left: 20px;
+			
+			.eltdf-category-icon {
+				display: none;
+			}
+			
+			.eltdf-cli-category {
+				position: relative;
+				display: inline-block;
+				vertical-align: top;
+				padding: 2px 10px;
+				margin: 0 2px 5px 0;
+				font-family: $default-heading-font-m;
+				font-size: 12px;
+				line-height: 17px;
+				color: #fff;
+				background-color: $default-heading-color;
+				border-radius: 4px;
+			}
+		}
+	}
+
+    .eltdf-course-list-holder {
+    
+        &.eltdf-nav-full-width {
+            
+            .eltdf-slider-has-both-nav {
+        
+                .owl-nav {
+                    $pos: calc(-50% - 54px); // 54 is is half height of pagination control + top margin
+    
+                    .owl-prev {
+                        @include eltdfTransform(translateX(-50%) translateY($pos));
+                    }
+    
+                    .owl-next {
+                        @include eltdfTransform(translateX(50%) translateY($pos));
+                    }
+                }
+            }
+        }
+        
+        .owl-nav {
+
+            .owl-prev {
+                left: -50px;
+            }
+            
+            .owl-next {
+                right: -50px;
+            }
+	        
+	        @include phone-landscape {
+		        
+		        .owl-prev {
+			        left: 20px;
+		        }
+		
+		        .owl-next {
+			        right: 20px;
+		        }
+	        }
+        }
+
+	
+	    .owl-dots {
+		    margin-top: 50px;
+	    }
+	
+	    .eltdf-slider-has-both-nav {
+		
+		    .owl-nav {
+			
+			    .owl-prev,
+			    .owl-next {
+				    $pos: calc(-50% - 54px); // 54 is is half height of pagination control + top margin
+				    @include eltdfTransform(translateY($pos));
+			    }
+		    }
+	    }
+
+        &.eltdf-nav-light-skin {
+
+            .owl-nav {
+
+                .owl-prev,
+                .owl-next {
+
+                    &:hover {
+
+                        .eltdf-prev-icon,
+                        .eltdf-next-icon {
+                            color: $header-light-hover-color;
+                        }
+                    }
+                }
+
+                .eltdf-prev-icon,
+                .eltdf-next-icon {
+                    color: $header-light-color;
+                }
+            }
+        }
+
+        &.eltdf-nav-dark-skin {
+
+            .owl-nav {
+
+                .owl-prev,
+                .owl-next {
+
+                    &:hover {
+
+                        .eltdf-prev-icon,
+                        .eltdf-next-icon {
+                            color: $header-dark-hover-color;
+                        }
+                    }
+                }
+
+                .eltdf-prev-icon,
+                .eltdf-next-icon {
+                    color: $header-dark-color;
+                }
+            }
+        }
+
+        &.eltdf-pag-light-skin {
+
+            .owl-dots {
+
+                .owl-dot {
+
+                    span {
+                        background-color: rgba($header-light-color, .5);
+                    }
+
+                    &.active,
+                    &:hover {
+
+                        span {
+                            background-color: $header-light-color;
+                        }
+                    }
+                }
+            }
+        }
+
+        &.eltdf-pag-on-slider {
+
+            .owl-nav {
+
+                .owl-prev,
+                .owl-next {
+                    @include eltdfTransform(translateY(-50%));
+                }
+            }
+
+            .owl-dots {
+                position: absolute;
+                left: 0;
+                bottom: 20px;
+                width: 100%;
+                margin: 0;
+            }
+        }
+    }
+}
+/* ==========================================================================
+   Course Slider shortcode style - end
+   ========================================================================== */

@@ -1,0 +1,11 @@
+/* ==========================================================================
+   Global partials
+   ========================================================================== */
+@import '../../../../../themes/esmarts/assets/css/scss/_variables';
+@import '../../../../../themes/esmarts/assets/css/scss/_mixins';
+
+/* ==========================================================================
+   Common responsive styles
+   ========================================================================== */
+@import '../../../reviews/assets/css/scss/responsive/*.scss';
+@import '../../../post-types/**/assets/css/scss/responsive/**/*.scss';

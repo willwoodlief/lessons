@@ -1,0 +1,92 @@
+/* ==========================================================================
+# Instructor simple - begin
+	========================================================================== */
+
+.eltdf-instructor {
+	
+	&.simple {
+
+		&:hover {
+			.eltdf-instructor-info {
+				@include eltdfTransform(translate3d(10px,0,0) scaleX(0.98));
+			}
+
+			.eltdf-instructor-image {
+				@include eltdfTransform(scale(1.15));
+			}
+
+			.eltdf-instructor-title-holder {
+				box-shadow: -2px 2px 6px 1px rgba(0,0,0,.15);
+			}
+		}
+
+		.eltdf-instructor-inner {
+			@include eltdfRelativeHolderLayout();
+		}
+		
+		.eltdf-instructor-image {
+			position: absolute;
+			top: calc(50% - 37px);
+			left: 0;
+			width: 75px;
+			@include eltdfTransform(scale(1) translateZ(0));
+			@include eltdfTransformOrigin(0 50%);
+			@include eltdfTransition(transform .3s cubic-bezier(0.27, -0.22, 0.26, 1.37));
+			backface-visibility: hidden;
+			
+			img {
+				display: block;
+				border-radius: 100%;
+			}
+		}
+		
+		.eltdf-instructor-info {
+			margin: 0;
+			padding: 0 0 0 95px;
+			box-sizing: border-box;
+			cursor: pointer;
+			@include eltdfTransform(translate3d(0px,0,0) scaleX(1));
+			@include eltdfTransformOrigin(50% 100%);
+			@include eltdfTransition(transform .3s cubic-bezier(0.27, -0.22, 0.26, 1.37));
+		}
+
+		.eltdf-instructor-title-holder {
+			@include eltdfRelativeHolderLayout();
+			min-height: 75px;
+			padding: 29px 20px;
+			background-color: #fff;
+			border-radius: 6px;
+			box-shadow: $box-shadow-variable;
+			box-sizing: border-box;
+			
+			&:before {
+				content: '';
+				position: absolute;
+				top: calc(50% - 15px);
+				left: -14px;
+				width: 0;
+				height: 0;
+				border-top: 15px solid transparent;
+				border-bottom: 15px solid transparent;
+				border-right: 15px solid #fff;
+				z-index: 2;
+			}
+			
+			&:after {
+				content: '';
+				position: absolute;
+				top: calc(50% - 10px);
+				left: -8px;
+				width: 20px;
+				height: 20px;
+				//box-shadow: 2px 2px 3px 0 rgba(#000, .15);
+				z-index: 1;
+				@include eltdfTransform(rotate(135deg));
+			}
+		}
+	}
+}
+
+/* ==========================================================================
+# Instructor simple - end
+	========================================================================== */

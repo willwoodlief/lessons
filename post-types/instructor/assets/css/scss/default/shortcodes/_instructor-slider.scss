@@ -1,0 +1,39 @@
+/* ==========================================================================
+# Instructor slider - begin
+	========================================================================== */
+
+.eltdf-instructor-slider-holder {
+    
+    .eltdf-owl-slider {
+        
+        &.eltdf-grid {
+            margin: 0 auto;
+        }
+        
+        .owl-nav {
+            
+            .owl-prev {
+                left: -50px;
+            }
+
+            .owl-next {
+                right: -50px;
+            }
+    
+            @include phone-landscape {
+        
+                .owl-prev {
+                    left: 20px;
+                }
+        
+                .owl-next {
+                    right: 20px;
+                }
+            }
+        }
+    }
+}
+
+/* ==========================================================================
+# Instructor slider - end
+	========================================================================== */

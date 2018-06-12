@@ -1,0 +1,14 @@
+.eltdf-lesson-single-holder {
+	.eltdf-lms-lesson-content-wrapper {
+		padding: 28px 15% 24px;
+	}
+    .eltdf-lms-message {
+        color: $first-main-color;
+        span {
+            vertical-align: middle;
+        }
+        .eltdf-lms-message-text {
+            padding-left: 5px;
+        }
+    }
+}

@@ -1,0 +1,80 @@
+/* ==========================================================================
+   Course shortcode responsive style - begin
+   ========================================================================== */
+
+@include laptop-landscape {
+
+    .eltdf-course-list-holder {
+
+        &.eltdf-cl-gallery {
+
+            $gallery_columns_number: ('four', 'five');
+
+            @for $i from 0 to length($gallery_columns_number) {
+                &.eltdf-cl-#{nth($gallery_columns_number,$i+1)}-columns {
+                    $gallery_item_size: 100% / 3;
+
+                    article {
+                        width: $gallery_item_size;
+                    }
+
+                    @media only screen and (min-width: $ipad-landscape-plus-pixel) {
+
+                        article {
+
+                            &:nth-child(3n+1) {
+                                clear: both;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@include ipad-landscape {
+
+    .eltdf-course-list-holder {
+
+        &.eltdf-cl-gallery {
+
+            $gallery_columns_number: ('three', 'four', 'five');
+
+            @for $i from 0 to length($gallery_columns_number) {
+                &.eltdf-cl-#{nth($gallery_columns_number,$i+1)}-columns {
+
+                    article {
+                        width: 50%;
+                    }
+
+                    @media only screen and (min-width: $phone-landscape-plus-pixel) {
+
+                        article {
+
+                            &:nth-child(2n+1) {
+                                clear: both;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@include phone-landscape {
+
+    .eltdf-course-list-holder {
+
+        &.eltdf-cl-gallery {
+
+            article {
+                width: 100% !important; // !important is set to override all other stronger selectors
+            }
+        }
+    }
+}
+/* ==========================================================================
+   Course shortcode responsive style - end
+   ========================================================================== */

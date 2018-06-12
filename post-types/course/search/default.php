@@ -1,0 +1,2 @@
+<?php eltdf_lms_get_cpt_single_module_template_part( 'search/parts/search-form', 'course', '', $params ); ?>
+<?php eltdf_lms_get_cpt_single_module_template_part( 'search/parts/loop', 'course', '', $params ); ?>

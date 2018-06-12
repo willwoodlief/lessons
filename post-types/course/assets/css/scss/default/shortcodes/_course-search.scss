@@ -1,0 +1,122 @@
+/* ==========================================================================
+   Course search shortcode style - begin
+   ========================================================================== */
+
+.eltdf-advanced-course-search {
+	@include eltdfRelativeHolderLayout();
+	
+	.search-results & {
+		padding-bottom: 50px;
+	}
+	
+	select {
+		display: none;
+	}
+	
+	.select2 {
+		min-width: calc((100% - 200px) / 3 - 26px);
+		margin-right: 26px;
+		
+		&:first-of-type {
+			
+			.select2-selection__rendered {
+				
+				&:before {
+					content: "\e821";
+					font-size: 30px;
+				}
+			}
+		}
+		
+		&:nth-of-type(2) {
+			
+			.select2-selection__rendered {
+				
+				&:before {
+					content: "\e82a";
+				}
+			}
+		}
+		
+		&:last-of-type {
+			
+			.select2-selection__rendered {
+				
+				&:before {
+					content: "\e82f";
+				}
+			}
+		}
+		
+		.select2-selection--single {
+			height: 60px;
+			line-height: 58px;
+			font-family: $default-heading-font-m;
+			font-size: 14px;
+			color: #929292;
+			background-color: #fff;
+			border: 0;
+			border-radius: 30px;
+			
+			.select2-selection__rendered {
+				padding-left: 60px;
+				
+				&:before {
+					position: absolute;
+					top: 0;
+					left: 20px;
+					width: 40px;
+					height: 100%;
+					color: $first-main-color;
+					font-family: 'Linearicons-Free', serif;
+					font-size: 24px;
+					line-height: inherit;
+				}
+			}
+		}
+	}
+	
+	.eltdf-btn.eltdf-btn-large {
+		padding-top: 18px;
+		padding-bottom: 18px;
+
+		&:hover {
+			border-color: transparent !important;
+		}
+	}
+}
+
+@include laptop-landscape-medium {
+	
+	.eltdf-advanced-course-search {
+		
+		.select2 {
+			min-width: calc((100% - 166px) / 3 - 20px);
+			margin-right: 20px;
+			
+			.select2-selection--single {
+				height: 46px;
+				line-height: 44px;
+			}
+		}
+		
+		.eltdf-btn.eltdf-btn-large {
+			padding: 11px 46px;
+		}
+	}
+}
+
+@include ipad-portrait {
+	
+	.eltdf-advanced-course-search {
+		
+		.select2 {
+			min-width: 100%;
+			margin: 0 0 20px;
+		}
+	}
+}
+
+/* ==========================================================================
+   Course search shortcode style - end
+   ========================================================================== */

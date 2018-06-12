@@ -1,0 +1,1 @@
+<?php echo esmarts_elated_execute_shortcode( 'eltdf_course_search', $search_params );

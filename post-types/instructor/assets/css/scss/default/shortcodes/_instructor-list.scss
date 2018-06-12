@@ -1,0 +1,190 @@
+/* ==========================================================================
+# Instructor list - begin
+	========================================================================== */
+
+.eltdf-instructor-list-holder {
+    @include eltdfRelativeHolderLayout();
+    
+    &.eltdf-instructor-boxed {
+	
+	    .eltdf-instructor-image {
+		    z-index: 1;
+		    
+		    img {
+			    max-width: 70%;
+		    }
+
+            a {
+                &:hover {
+                    transform: none;
+                }
+            }
+	    }
+
+        .eltdf-instructor-inner {
+            .eltdf-instructor-info {
+                top: -95px;
+                margin: 0;
+                padding: 114px 26px 34px;
+                background-color: #fff;
+                box-shadow: $box-shadow-variable;
+                border-radius: 6px;
+                box-sizing: border-box;
+                @include eltdfTransform(translate3d(0,0,0));
+                @include eltdfTransition(transform .3s cubic-bezier(.21,.6,.44,2.18), box-shadow .3s ease);
+            }
+
+            &:hover {
+                .eltdf-instructor-info {
+                    @include eltdfTransform(translate3d(0,-9px,0));
+                    box-shadow: -2px 2px 6px 1px rgba(0,0,0,.15);
+                }
+            }
+        }
+
+        .eltdf-instructor-text {
+            margin: 8px 0 0;
+        }
+    
+        .eltdf-instructor-social {
+            margin: 22px 0 0;
+        }
+    }
+
+    .eltdf-instructor {
+        @include eltdfRelativeHolderLayout();
+        float: left;
+        box-sizing: border-box;
+
+    }
+    
+    .eltdf-instructor-image {
+        @include eltdfRelativeHolderLayout();
+	    
+	    > a {
+		    position: relative;
+		    display: block;
+            @include eltdfTransform(translate3d(0,0,0));
+            @include eltdfTransitionTransform(.3s cubic-bezier(.21,.6,.44,2.18));
+
+            &:hover {
+                @include eltdfTransform(translate3d(0,-3px,0));
+            }
+	    }
+        
+        img {
+            display: block;
+        }
+    }
+    
+    .eltdf-instructor-info {
+        @include eltdfRelativeHolderLayout();
+        margin: 29px 0 0;
+    }
+    
+    .eltdf-instructor-name {
+        margin: 0;
+    }
+    
+    .eltdf-instructor-position {
+        display: block;
+        margin: 6px 0 0;
+        color: #b9b9b9;
+    }
+    
+    .eltdf-instructor-text {
+        margin: 16px 0 0;
+        
+        p {
+            margin: 0;
+        }
+    }
+    
+    .eltdf-instructor-info-wrapper {
+        @include eltdfAbsoluteHolderLayout();
+        background-color: rgba(#fff, .85);
+        z-index: 1;
+        opacity: 0;
+        @include eltdfTransform(translateZ(0));
+        @include eltdfTransition(opacity .3s);
+    }
+    
+    .eltdf-instructor-info-tb {
+        @include eltdfTableLayout();
+    }
+    
+    .eltdf-instructor-info-tc {
+        position: relative;
+        display: table-cell;
+        height: 100%;
+        width: 100%;
+        padding: 20px 40px 33px;
+        vertical-align: bottom;
+        @include eltdfTransitionTransform(.0s .3s);
+        @include eltdfTransform(translate3d(0,40px,0));
+    }
+    
+    .eltdf-instructor-social {
+        @include eltdfRelativeHolderLayout();
+        margin: 32px 0 0;
+    
+        .eltdf-icon-shortcode {
+            font-size: 12px;
+            margin: 0 5px;
+        
+            a {
+                color: #b9b9b9;
+            
+                &:hover {
+                    color: $first-main-color;
+                }
+            }
+        }
+    
+        .eltdf-icon-element {
+            font-size: inherit;
+            @include eltdfTransition(none);
+        }
+    }
+    
+    /***** Instructor Columns - begin *****/
+
+    $instructor_columns_number: ('two', 'three', 'four', 'five');
+
+    @for $i from 0 to length($instructor_columns_number) {
+        &.eltdf-tl-#{nth($instructor_columns_number,$i+1)}-columns {
+
+            .eltdf-instructor {
+                width: 100% / ($i+2);
+            }
+
+            @if ($i > 1) { // set different break point for four and five columns
+                @media only screen and (min-width:  $laptop-landscape-plus-pixel) {
+
+                    .eltdf-instructor {
+
+                        &:nth-child(#{$i+2}n+1) {
+                            clear: both;
+                        }
+                    }
+                }
+            } @else {
+                @media only screen and (min-width:  $ipad-landscape-plus-pixel) {
+
+                    .eltdf-instructor {
+
+                        &:nth-child(#{$i+2}n+1) {
+                            clear: both;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    /***** Instructor Columns - end *****/
+}
+
+/* ==========================================================================
+# Instructor list - end
+========================================================================== */

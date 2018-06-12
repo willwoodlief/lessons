@@ -1,0 +1,323 @@
+.eltdf-course-single-holder {
+	padding-bottom: 94px;
+	
+	.eltdf-course-title-wrapper {
+		width: 100%;
+		display: table;
+		table-layout: fixed;
+		
+		.eltdf-course-left-section,
+		.eltdf-course-right-section {
+			display: table-cell;
+			vertical-align: middle;
+			height: 100%;
+			
+			@include phone-landscape {
+				display: inline-block;
+			}
+		}
+
+		.eltdf-course-left-section {
+			width: 70%;
+			
+			@include phone-landscape {
+				width: 100%;
+			}
+		}
+		
+		.eltdf-course-right-section {
+			padding-top: 18px;
+			text-align: right;
+			width: 30%;
+			
+			@include phone-landscape {
+				width: 100%;
+				padding-top: 25px;
+				text-align: inherit;
+			}
+		}
+	}
+
+	.eltdf-course-single-title {
+		display: inline-block;
+		vertical-align: middle;
+		margin-right: 12px;
+	}
+	
+	.eltdf-course-single-type {
+		position: relative;
+		display: inline-block;
+		vertical-align: middle;
+		margin: 0;
+		padding: 3px 20px;
+		font-family: $default-heading-font-m;
+		font-size: 14px;
+		line-height: 22px;
+		color: #fff;
+		background-color: $aditional-text-color;
+		border-radius: 4px;
+		box-sizing: border-box;
+		
+		&.eltdf-free-course {
+			background-color: $first-main-color;
+		}
+		
+		@include ipad-portrait {
+			padding: 3px 14px 2px 14px;
+		}
+	}
+	
+	.eltdf-course-whishlist {
+		font-family: $default-heading-font-m;
+		font-size: 14px;
+		line-height: 21px;
+		color: $default-text-color;
+		
+		&:hover {
+			color: $default-heading-color;
+		}
+		
+		i {
+			font-size: 16px;
+			margin-right: 6px;
+		}
+		
+		* {
+			position: relative;
+			display: inline-block;
+			vertical-align: top;
+			line-height: inherit;
+		}
+	}
+
+	.eltdf-course-basic-info-wrapper {
+		@include eltdfRelativeHolderLayout();
+		margin-top: 30px;
+		
+		@include phone-landscape {
+			margin-top: 20px;
+		}
+		
+		.eltdf-grid-col-9 {
+			
+			.eltdf-grid-col-4 {
+				
+				@media only screen and (min-width: $phone-landscape-plus-pixel) and (max-width: $ipad-landscape) {
+					float: left;
+					width: 33.33333%;
+				}
+			}
+		}
+		
+		a:not(.eltdf-btn) {
+			color: $default-text-color;
+			
+			&:hover {
+				color: $default-heading-color;
+			}
+			
+			@include ipad-landscape {
+				display: block;
+			}
+		}
+		
+		.eltdf-instructor-label,
+		.eltdf-course-category-label,
+		.eltdf-course-reviews-label{
+			display: block;
+			font-family: $default-heading-font-m;
+			font-size: 14px;
+			line-height: 18px;
+			color: $default-heading-color;
+		}
+		
+		.eltdf-course-category-items {
+			display: block;
+			margin-top: 1px;
+		}
+
+		.eltdf-course-instructor {
+			@include eltdfTableLayout;
+			
+			.eltdf-instructor-image,
+			.eltdf-instructor-info {
+				@include eltdfTableCellLayout;
+			}
+			
+			@include ipad-portrait {
+				
+				.eltdf-instructor-info {
+					padding-top: 6px;
+				}
+			}
+
+			.eltdf-instructor-image {
+				width: 70px;
+				padding-right: 18px;
+				
+				@include phone-landscape {
+					display: none;
+				}
+				
+				img {
+					display: block;
+				}
+			}
+			
+			.eltdf-instructor-name {
+				display: block;
+				margin-top: 4px;
+				line-height: 22px;
+			}
+		}
+		
+		.eltdf-course-categories {
+			
+			@include laptop-landscape-medium {
+				padding-top: 13px;
+			}
+		}
+		
+		.eltdf-course-reviews {
+			
+			@include laptop-landscape-medium {
+				padding-top: 2px;
+			}
+			
+			.eltdf-post-info-comments {
+				display: none;
+			}
+		}
+
+		.eltdf-course-categories,
+		.eltdf-course-reviews {
+			padding-top: 12px;
+			padding-left: 30px;
+			border-left: 1px solid $default-border-color;
+			
+			@include laptop-landscape-medium {
+				padding-left: 20px;
+			}
+			
+			@include ipad-landscape {
+				padding-top: 12px;
+			}
+			
+			@include ipad-portrait {
+				padding-top: 6px;
+			}
+			
+			@include phone-landscape {
+				padding-top: 20px;
+				padding-left: 0;
+				border-left: 0;
+			}
+		}
+
+		.eltdf-course-stars {
+			display: block;
+			margin-top: 1px;
+			
+			i {
+				color:  #ffcc00;
+			}
+		}
+		
+		.eltdf-post-info-comments {
+			display: block;
+		}
+		
+		.eltdf-course-action {
+
+			.eltdf-buy-item-form {
+				button {
+					position: relative;
+					z-index: 1;
+					border: none;
+					line-height: 26px;
+					&:after {
+						position: absolute;
+						bottom: 0;
+						left: 0;
+						display: block;
+						content: " ";
+						width: 100%;
+						height: 0;
+						background-color: $adittional-green-color;
+						border-radius: inherit;
+						z-index: -1;
+						@include eltdfTransformOrigin(0 100%);
+						@include eltdfTransition(height .25s ease-in-out);
+					}
+
+					&:hover {
+						background-color: $first-main-color !important;
+						&:after {
+							height: 100%;
+						}
+					}
+				}
+			}
+			
+			.eltdf-pb-title-holder {
+				margin-bottom: 3px;
+			}
+			
+			@media only screen and (min-width: $ipad-landscape-plus-pixel) {
+				text-align: right;
+				
+				.eltdf-buy-item-form {
+					margin-top: 15px;
+				}
+			}
+			
+			@include laptop-landscape-medium {
+				
+				.eltdf-btn {
+					padding: 10px 36px;
+				}
+			}
+			
+			@include ipad-landscape {
+				margin-top: 20px;
+			}
+		}
+	}
+
+	.eltdf-course-image-wrapper {
+		margin-top: 46px;
+	}
+	
+	.eltdf-course-tabs-wrapper {
+		margin-top: 18px;
+		
+		.eltdf-tab-container {
+			margin-top: 39px;
+		}
+		
+		.eltdf-course-content-title {
+			margin-top: 0;
+		}
+		
+		.eltdf-tabs-nav {
+			
+			li {
+				
+				a {
+					
+					> span {
+						position: relative;
+						display: inline-block;
+						vertical-align: top;
+						line-height: inherit;
+					}
+					
+					.eltdf-tab-icon {
+						font-size: 14px;
+						padding-right: 5px;
+					}
+				}
+			}
+		}
+	}
+}
