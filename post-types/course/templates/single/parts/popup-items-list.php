@@ -9,7 +9,7 @@ if ( ! empty( $course_sections ) ) {
 			<?php foreach ( $course_sections as $course_section ) { ?>
 				<div class="eltdf-popup-items-section"
 					<?php if ( ($unlocks['last_unlocked_section'] >= 0) && ($section_counter > $unlocks['last_unlocked_section'])) { ?>
-                         style="background-color: lightgrey"
+                         style="background-color: transparent"
                     <?php } ?>
                 > <!--todo  head of section -->
 					<?php if ( ($unlocks['last_unlocked_section'] >= 0) && ($section_counter > $unlocks['last_unlocked_section'])) { ?>
