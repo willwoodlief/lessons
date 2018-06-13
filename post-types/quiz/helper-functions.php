@@ -394,7 +394,7 @@ if ( ! function_exists( 'eltdf_lms_finish_quiz' ) ) {
 			
 			//Update course status field
 			$items              = eltdf_lms_get_items_in_course( $course_id );
-			$user_status_values = eltdf_lms_get_user_courses_status();
+			$user_status_values = eltdf_lms_get_user_courses_status(null,$course_id);
 			if ( ! empty( $user_status_values ) && array_key_exists( $course_id, $user_status_values ) && $result['passed'] ) {
 				
 				$items_completed = array_unique( array_merge( $user_status_values[ $course_id ]['items_completed'], array( $item_id ) ) );

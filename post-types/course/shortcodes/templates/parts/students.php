@@ -1,6 +1,11 @@
 <?php
 $students        = get_post_meta( get_the_ID(), 'eltdf_course_users_attended', true );
-$students_number = count( $students );
+if (empty($students)) {
+    $students_number = 0;
+} else {
+	$students_number = count( $students );
+}
+
 ?>
 <div class="eltdf-students-number-holder">
 	<span class="eltdf-student-icon"></span>

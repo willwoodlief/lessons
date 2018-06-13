@@ -360,27 +360,33 @@ if ( ! function_exists( 'eltdf_lms_course_add_to_cart_action' ) ) {
 	add_action( 'woocommerce_add_to_cart_handler_course', 'eltdf_lms_course_add_to_cart_action', 10, 1 );
 }
 
+
+
+
 if ( ! function_exists( 'eltdf_lms_course_add_users_to_course' ) ) {
 	function eltdf_lms_course_add_users_to_course( $id ) {
 		$order      = new WC_Order( $id );
 		$items      = $order->get_items();
-		
+		$user_id =      $order->user_id;
+
+
 		foreach ( $items as $item ) {
 			$data       = $item->get_data();
 			$product_id = $data['product_id'];
 			
 			// if ( $item['product_id'] == 0 && get_post_type( $product_id ) == 'course' ) { //todo change will to allow woo rest purchases
 			if (  get_post_type( $product_id ) == 'course' ) {
-				$users = [];
-				if (  get_post_meta( $product_id, 'eltdf_course_users_attended', true ) !== '' ) {
-					$users[] = get_current_user_id();
+				$users = get_post_meta( $product_id, 'eltdf_course_users_attended', true );
+				if (is_array($users)) {
+					$users[] = $user_id;
 				} else {
-					$users = array( get_current_user_id() );
+					$users = array( $user_id );
 				}
+
 				
 				update_post_meta( $product_id, 'eltdf_course_users_attended', $users );
 				
-				$user_status_values = eltdf_lms_get_user_courses_status();
+				$user_status_values = eltdf_lms_get_user_courses_status($user_id);
 				
 				if ( ! empty( $user_status_values ) ) {
 					if ( ! array_key_exists( $product_id, $user_status_values ) ) {
@@ -390,7 +396,7 @@ if ( ! function_exists( 'eltdf_lms_course_add_users_to_course' ) ) {
 							'retakes'         => 0
 						);
 						
-						eltdf_lms_set_user_courses_status( $user_status_values );
+						eltdf_lms_set_user_courses_status( $user_status_values,$user_id );
 					}
 				} else {
 					$user_status_new_values = array(
@@ -401,16 +407,16 @@ if ( ! function_exists( 'eltdf_lms_course_add_users_to_course' ) ) {
 						)
 					);
 					
-					eltdf_lms_set_user_courses_status( $user_status_new_values );
+					eltdf_lms_set_user_courses_status( $user_status_new_values,$user_id );
 				}
 
-				//todo add user start time here
-				$start_times = get_user_meta( get_current_user_id(), 'ecomhub_fi_user_start_course', true );
+				// add user start time here
+				$start_times = get_user_meta( $user_id, 'ecomhub_fi_user_start_course', true );
 				if (!$start_times) {
 					$start_times = [];
 				}
 				$start_times[$product_id] = time();
-				update_user_meta( get_current_user_id(), 'ecomhub_fi_user_start_course', $start_times );
+				update_user_meta( $user_id, 'ecomhub_fi_user_start_course', $start_times );
 			}
 		}
 	}
@@ -600,7 +606,7 @@ if ( ! function_exists( 'eltdf_lms_complete_item' ) ) {
 			parse_str( $data_string, $data_array );
 			$course_id          = $data_array['eltdf_lms_course_id'];
 			$item_id            = $data_array['eltdf_lms_item_id'];
-			$user_status_values = eltdf_lms_get_user_courses_status();
+			$user_status_values = eltdf_lms_get_user_courses_status(null,$course_id);
 			
 			$items = eltdf_lms_get_items_in_course( $course_id );
 			
@@ -712,14 +718,33 @@ if ( ! function_exists( 'eltdf_lms_get_course_item_completed_class' ) ) {
 }
 
 if ( ! function_exists( 'eltdf_lms_set_user_courses_status' ) ) {
-	function eltdf_lms_set_user_courses_status( $user_status_values ) {
-		update_user_meta( get_current_user_id(), 'eltdf_user_course_status', $user_status_values );
+	function eltdf_lms_set_user_courses_status( $user_status_values,$user_id= null ) {
+		if (!$user_id) {
+			$user_id = get_current_user_id();
+		}
+		update_user_meta( $user_id, 'eltdf_user_course_status', $user_status_values );
 	}
 }
 
 if ( ! function_exists( 'eltdf_lms_get_user_courses_status' ) ) {
-	function eltdf_lms_get_user_courses_status() {
-		$user_status_values = get_user_meta( get_current_user_id(), 'eltdf_user_course_status', true );
+	function eltdf_lms_get_user_courses_status($user_id = null,$product_id_if_mising = null) {
+		if (!$user_id) {
+			$user_id = get_current_user_id();
+		}
+		$user_status_values = get_user_meta( $user_id, 'eltdf_user_course_status', true );
+
+		if (!$user_status_values) {
+			if ($product_id_if_mising) {
+				$user_status_values = array(
+					$product_id_if_mising => array(
+						'status'          => 'enrolled',
+						'items_completed' => array(),
+						'retakes'         => 0
+					)
+				);
+
+			}
+		}
 		
 		return $user_status_values;
 	}
@@ -727,7 +752,7 @@ if ( ! function_exists( 'eltdf_lms_get_user_courses_status' ) ) {
 if ( ! function_exists( 'eltdf_lms_user_current_course_info' ) ) {
 	function eltdf_lms_user_current_course_info( $id = '' ) {
 		$course_id          = ( $id != '' ? $id : get_the_ID() );
-		$user_status_values = eltdf_lms_get_user_courses_status();
+		$user_status_values = eltdf_lms_get_user_courses_status(null,$course_id);
 		
 		if ( is_array( $user_status_values ) && count( $user_status_values ) > 0 && array_key_exists( $course_id, $user_status_values ) ) {
 			return $user_status_values[ $course_id ];
@@ -874,7 +899,7 @@ if ( ! function_exists( 'eltdf_lms_retake_course' ) ) {
 			parse_str( $data_string, $data_array );
 			$course_id = $data_array['eltdf_lms_course_id'];
 			
-			$user_courses_status_values = eltdf_lms_get_user_courses_status();
+			$user_courses_status_values = eltdf_lms_get_user_courses_status(null,$course_id);
 			$user_course_status_values  = eltdf_lms_user_current_course_info( $course_id );
 			
 			$user_status_new_values = array(
@@ -1285,7 +1310,7 @@ if ( ! function_exists( 'eltdf_lms_complete_button' ) ) {
 		
 		if ( eltdf_lms_user_has_course( $params['course_id'] ) ) {
 			$html               = eltdf_lms_cpt_single_module_template_part( 'templates/single/parts/complete-form', 'course', '', $params );
-			$user_status_values = eltdf_lms_get_user_courses_status();
+			$user_status_values = eltdf_lms_get_user_courses_status(null,$params['course_id']);
 			
 			if ( ! empty( $user_status_values ) && array_key_exists( $params['course_id'], $user_status_values ) ) {
 				if ( in_array( $params['item_id'], $user_status_values[ $params['course_id'] ]['items_completed'] ) ) {

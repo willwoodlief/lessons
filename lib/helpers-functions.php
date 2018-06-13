@@ -269,8 +269,12 @@ if ( ! function_exists( 'eltdf_lms_eltdf_woocommerce_integration_installed' ) ) 
 
 if ( ! function_exists( 'eltdf_lms_update_order_status' ) ) {
 	function eltdf_lms_update_order_status( $order_id, $old_status, $new_status ) {
-		$items              = wc_get_order( $order_id )->get_items();
-		$user_status_values = get_user_meta( get_current_user_id(), 'eltdf_user_course_status', true );
+		$wc_order = wc_get_order( $order_id );
+		$items              = $wc_order->get_items();
+
+		$user_id =      $wc_order->user_id;
+
+		$user_status_values = get_user_meta( $user_id, 'eltdf_user_course_status', true );
 		
 		if ( $new_status == 'completed' ) {
 			foreach ( $items as $item ) {
@@ -304,7 +308,7 @@ if ( ! function_exists( 'eltdf_lms_update_order_status' ) ) {
 			}
 		}
 		
-		update_user_meta( get_current_user_id(), 'eltdf_user_course_status', $user_status_values );
+		update_user_meta( $user_id, 'eltdf_user_course_status', $user_status_values );
 	}
 	
 	add_action( 'woocommerce_order_status_changed', 'eltdf_lms_update_order_status', 10, 3 );
