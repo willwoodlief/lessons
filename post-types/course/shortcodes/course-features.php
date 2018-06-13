@@ -172,7 +172,7 @@ class CourseFeatures implements Lib\ShortcodeInterface {
 			$html = '<li class="eltdf-feature-item">';
 			$html .= '<span class="eltdf-item-icon"><i class="lnr lnr-users" aria-hidden="true"></i></span>';
 			$html .= '<span class="eltdf-item-label">' . esc_html__( 'Students', 'eltdf-lms' ) . '</span>';
-			$html .= '<span class="eltdf-item-value">' . $students . '</span>';
+			$html .= '<span class="eltdf-item-value">' . count($students) . '</span>';
 			$html .= '</li>';
 		}
 		
