@@ -66,7 +66,7 @@ if ( ! function_exists( 'eltdf_lms_scripts' ) ) {
 			$array_deps_js[]             = 'esmarts_elated_js_modules';
 		}
 		
-		wp_enqueue_style( 'eltdf_lms_style', plugins_url( ELATED_LMS_REL_PATH . '/assets/css/lms.min.css' ), $array_deps_css );
+		wp_enqueue_style( 'eltdf_lms_style', plugins_url( ELATED_LMS_REL_PATH . '/assets/css/lms.min.css' ), $array_deps_css,'wills.changes.0.1' );
 		if ( esmarts_elated_is_responsive_on() ) {
 			wp_enqueue_style( 'eltdf_lms_responsive_style', plugins_url( ELATED_LMS_REL_PATH . '/assets/css/lms-responsive.min.css' ), $array_deps_css_responsive );
 		}
