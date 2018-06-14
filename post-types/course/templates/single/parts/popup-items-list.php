@@ -7,14 +7,14 @@ if ( ! empty( $course_sections ) ) {
 	<div class="eltdf-course-popup-items">
 		<div class="eltdf-course-popup-items-list">
 			<?php foreach ( $course_sections as $course_section ) { ?>
-				<div class="eltdf-popup-items-section"
+				<div class="eltdf-popup-items-section" style="
 					<?php if ( ($unlocks['last_unlocked_section'] >= 0) && ($section_counter > $unlocks['last_unlocked_section'])) { ?>
-                         style="background-color: transparent"
+                         background-color: transparent"
                     <?php } ?>
-                > <!--todo  head of section -->
+                    clear: both"> <!--todo  head of section -->
 					<?php if ( ($unlocks['last_unlocked_section'] >= 0) && ($section_counter > $unlocks['last_unlocked_section'])) { ?>
 
-                        <div class="ecomhub-fi-locked-description" style="z-index: 999999;width: 6em;height: 6em; margin: 2em;  float:left ">
+                        <div class="ecomhub-fi-locked-description" style="z-index: 999999;width: 6em;height: 6em; margin: 2.5em;  float:right ">
                            <div style="text-align: center;padding: 0.5em;background-color: #fbfbfb">
                                 <span class="ecomhub-fi-lock-image fa fa-lock" style="color:#3A4242;font-size: 3em"></span>
                                 <br>
