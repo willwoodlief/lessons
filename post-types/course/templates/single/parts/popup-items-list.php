@@ -14,8 +14,8 @@ if ( ! empty( $course_sections ) ) {
                 > <!--todo  head of section -->
 					<?php if ( ($unlocks['last_unlocked_section'] >= 0) && ($section_counter > $unlocks['last_unlocked_section'])) { ?>
 
-                        <div class="ecomhub-fi-locked-description" style="z-index: 999999;width: 20%;height: 20%; margin: 2em;  float:left ">
-                            <div style="text-align: center">
+                        <div class="ecomhub-fi-locked-description" style="z-index: 999999;width: 6em;height: 6em; margin: 2em;  float:left ">
+                           <div style="text-align: center;padding: 0.5em;border: 1px black solid">
                                 <span class="ecomhub-fi-lock-image fa fa-lock" style="color:#3A4242;font-size: 3em"></span>
                                 <br>
                                 <span class="ecomhub-fi-lock-human-span" style="color: black"><?= $unlocks['human'][$section_counter-1] ?></span>
