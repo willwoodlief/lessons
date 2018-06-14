@@ -7,13 +7,46 @@ $has_video_link = get_post_meta( get_the_ID(), "eltdf_lesson_video_custom_meta",
 		<?php
 		if ( $video_type == 'social_networks' ) {
 			$videolink = get_post_meta( get_the_ID(), "eltdf_lesson_video_link_meta", true );
-			echo wp_oembed_get( esc_url($videolink) );
+			/*
+
+
+			 */
+			$thing =  wp_oembed_get( esc_url($videolink) );
+			preg_match("/(?P<first>\<iframe)([\s]*)(?P<last>src.*)/", $thing, $output_array);
+			$new_thing = $output_array['first'] . ' onload="ecomhub_fi_initial_vimeo_resize() "  ' .  $output_array['last'];
+			echo $new_thing;
+			print "\n<script>
+                function ecomhub_fi_initial_vimeo_resize() {
+                    var height = $('div.eltdf-course-popup-inner').height() - $('div.eltdf-popup-content').position().top;
+                    var iframe_height = $('iframe').height();
+                    if (iframe_height > height - 30) {
+                        var width = $('div.eltdf-lesson-video-holder').width() * 0.75;
+                        $('iframe').width(width);
+                        $('iframe').height(height);
+                    } 
+                    console.log('frame load finished');
+                }
+                
+                $(function() {
+                    console.log('on load called for me');
+                    $( window ).resize(function() {
+                        console.log('resize for me');
+                        var height = $('div.eltdf-course-popup-inner').height() - $('div.eltdf-popup-content').position().top;
+                        var iframe_height = $('iframe').height();
+                        if (iframe_height > height - 30) {
+                            var width = $('div.eltdf-lesson-video-holder').width() * 0.75;
+                            $('iframe').width(width);
+                            $('iframe').height(height);
+                        }     
+                    });
+                });
+            </script>";
 		} else if ( $video_type == 'self' ) {
 			$videolink  = get_post_meta(get_the_ID(), "eltdf_lesson_video_custom_meta", true);
 			$videoimage = get_post_meta(get_the_ID(), "eltdf_lesson_video_image_meta", true);
 			$flashmedia = get_template_directory_uri() . '/assets/js/flashmediaelement.swf';
 			?>
-			<div class="eltdf-self-hosted-video-holder">
+			<div class="eltdf-self-hosted-video-holder" style="text-align: center">
 				<div class="eltdf-video-wrap">
 					<video class="eltdf-self-hosted-video" poster="<?php echo esc_url( $videoimage ); ?>" preload="auto">
 						<?php if ( ! empty( $videolink ) ) { ?> <source type="video/mp4" src="<?php echo esc_url( $videolink ); ?>"> <?php } ?>
