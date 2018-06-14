@@ -24,13 +24,13 @@ $has_video_link = get_post_meta( get_the_ID(), "eltdf_lesson_video_custom_meta",
                         $('iframe').width(width);
                         $('iframe').height(height);
                     } 
-                    console.log('frame load finished');
+                    //console.log('frame load finished');
                 }
                 
                 $(function() {
-                    console.log('on load called for me');
+                   // console.log('on load called for me');
                     $( window ).resize(function() {
-                        console.log('resize for me');
+                       // console.log('resize for me');
                         var height = $('div.eltdf-course-popup-inner').height() - $('div.eltdf-popup-content').position().top;
                         var iframe_height = $('iframe').height();
                         if (iframe_height > height - 30) {
