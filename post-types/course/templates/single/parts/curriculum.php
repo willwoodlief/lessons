@@ -16,7 +16,7 @@ if(!empty($course_sections)) {
                     <?php if ( ($unlocks['last_unlocked_section'] >= 0) && ($section_counter > $unlocks['last_unlocked_section'])) { ?>
                         <div class="ecomhub-fi-locked-section" style="z-index: 999998;position: absolute;width: 100%;height: 100%; top:0;left: 0; background-color: transparent; opacity: 0.25" data-section="<?=$section_counter?>" data-oo="curriculum"></div>
                         <div class="ecomhub-fi-locked-description" style="z-index: 999999;position: absolute;width: 6em;height: 6em; top:40%;left: 40% ">
-                            <div style="text-align: center;padding: 0.5em;border: 1px black solid">
+                            <div style="text-align: center;padding: 0.5em;background-color: #fbfbfb">
                                 <span class="ecomhub-fi-lock-image fa fa-lock" style="color:#3A4242;font-size: 3em"></span>
                                 <br>
                                 <span class="ecomhub-fi-lock-human-span" style="color: black"><?= $unlocks['human'][$section_counter-1] ?></span>
