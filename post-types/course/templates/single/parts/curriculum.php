@@ -14,8 +14,8 @@ if(!empty($course_sections)) {
             <?php foreach($course_sections as $course_section) {                ?>
                 <div class="eltdf-curriculum-section" style="position: relative;z-index: 1">   <!--todo head of section -->
                     <?php if ( ($unlocks['last_unlocked_section'] >= 0) && ($section_counter > $unlocks['last_unlocked_section'])) { ?>
-                        <div class="ecomhub-fi-locked-section" style="z-index 10;position: absolute;width: 100%;height: 100%; top:0;left: 0; background-color: transparent; opacity: 0.5" data-section="<?=$section_counter?>" data-oo="curriculum"></div>
-                        <div class="ecomhub-fi-locked-description" style="z-index 999999;position: absolute;width: 20%;height: 20%; top:40%;left: 40% ">
+                        <div class="ecomhub-fi-locked-section" style="z-index: 999998;position: absolute;width: 100%;height: 100%; top:0;left: 0; background-color: transparent; opacity: 0.25" data-section="<?=$section_counter?>" data-oo="curriculum"></div>
+                        <div class="ecomhub-fi-locked-description" style="z-index: 999999;position: absolute;width: 20%;height: 20%; top:40%;left: 40% ">
                             <div style="text-align: center">
                                 <span class="ecomhub-fi-lock-image fa fa-lock" style="color:#3A4242;font-size: 3em"></span>
                                 <br>
