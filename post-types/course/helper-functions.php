@@ -367,7 +367,7 @@ if ( ! function_exists( 'eltdf_lms_course_add_users_to_course' ) ) {
 	function eltdf_lms_course_add_users_to_course( $id ) {
 		$order      = new WC_Order( $id );
 		$items      = $order->get_items();
-		$user_id =      $order->user_id;
+		$user_id =      $order->get_user_id();
 
 
 		foreach ( $items as $item ) {

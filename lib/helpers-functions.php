@@ -272,7 +272,7 @@ if ( ! function_exists( 'eltdf_lms_update_order_status' ) ) {
 		$wc_order = wc_get_order( $order_id );
 		$items              = $wc_order->get_items();
 
-		$user_id =      $wc_order->user_id;
+		$user_id =      $wc_order->get_user_id();
 
 		$user_status_values = get_user_meta( $user_id, 'eltdf_user_course_status', true );
 		
