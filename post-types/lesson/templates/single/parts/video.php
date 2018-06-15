@@ -19,12 +19,12 @@ $has_video_link = get_post_meta( get_the_ID(), "eltdf_lesson_video_custom_meta",
                 function ecomhub_fi_initial_vimeo_resize() {
                     var height = $('div.eltdf-course-popup-inner').height() - $('div.eltdf-popup-content').position().top;
                     var iframe_height = $('iframe').height();
-                    if (iframe_height > height - 100) {
+                 //   if (iframe_height > height - 100) {
                         var width = $('div.eltdf-lesson-video-holder').width() * 0.75;
                         $('iframe').width(width);
                         $('iframe').height(height);
                         console.log('new stuff');
-                    } 
+                 //   } 
                     //console.log('frame load finished');
                 }
                 
