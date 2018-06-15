@@ -66,7 +66,25 @@ if(!empty($course_sections)) {
 	                                        <span class="eltdf-summary-value"><?php echo esc_html($lesson_info); ?></span>
                                         </div>
                                     <?php } ?>
-                                    <?php foreach ($elements as $key => $element) {	?>
+                                    <?php
+
+                                        $completed_html_template =  '<span class="lnr lnr-checkmark-circle" style="margin-left: 1em;color: #468bff">  </span> ';
+                                        $completed_lessons = ecomfub_fi_get_completed_array($lists['elements']);
+
+
+
+
+                                        foreach ($elements as $key => $element)
+
+                                    {
+                                        $lesson_id = $element['id'];
+	                                    $b_completed = in_array( $lesson_id, $completed_lessons);
+	                                    if ($b_completed) {
+		                                    $completed_html = $completed_html_template;
+                                        } else {
+	                                        $completed_html = '';
+                                        }
+                                        ?>
                                         <div class="eltdf-section-element <?php echo esc_attr($element['class']); ?> clearfix <?php echo eltdf_lms_get_course_item_completed_class($element['id']); ?>" data-section-element-id="<?php echo esc_attr($element['id']); ?>">
                                             <div class="eltdf-element-title">
                                                 <span class="eltdf-element-icon">
@@ -76,16 +94,16 @@ if(!empty($course_sections)) {
                                                     <?php echo esc_attr( $element['label'] ); ?>
                                                 </span>
 
-                                                <!-- todo preview course link in curriculum -->
+                                                <!--  preview course link in curriculum -->
 	                                            <?php if ( eltdf_lms_course_is_preview_available( $element['id'] )  && ( ($unlocks['last_unlocked_section'] >= 0) && ($section_counter <= $unlocks['last_unlocked_section']))) { ?>
 		                                            <a class="eltdf-element-name eltdf-element-link-open" itemprop="url" href="<?php echo esc_attr( $element['url'] ); ?>" title="<?php echo esc_attr( $element['title'] ); ?>" data-item-id="<?php echo esc_attr( $element['id'] ); ?>" data-course-id="<?php echo get_the_ID(); ?>">
-			                                            <?php echo esc_html( $element['title'] ); ?>
+			                                            <?php echo esc_html( $element['title'] ) . $completed_html; ?>
 			                                            <?php if ( ! eltdf_lms_user_has_course() || ! eltdf_lms_user_completed_prerequired_course() ) { ?>
 				                                            <span class="eltdf-element-preview-holder"><?php esc_html_e( 'preview', 'eltdf-lms' ); ?></span>
 			                                            <?php } ?>
 		                                            </a>
 	                                            <?php } else { ?>
-		                                            <?php echo esc_html( $element['title'] ); ?>
+		                                            <?php echo esc_html( $element['title'] ) ; ?>
 	                                            <?php } ?>
                                             </div>
 	                                        <div class="eltdf-element-info">

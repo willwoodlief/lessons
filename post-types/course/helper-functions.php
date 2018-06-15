@@ -598,8 +598,18 @@ if ( ! function_exists( 'eltdf_lms_popup_navigation' ) ) {
 
 if ( ! function_exists( 'ecomfub_fi_count_section_progress' ) ) {
 	function ecomfub_fi_count_section_progress($summary_elements) {
+
+		$result = ecomfub_fi_get_completed_array($summary_elements);
+		$ret = sizeof($result);
+
+		return $ret;
+	}
+}
+
+if ( ! function_exists( 'ecomfub_fi_get_completed_hash' ) ) {
+	function ecomfub_fi_get_completed_array($summary_elements) {
 		//build array of course indexes
-		$ret = 0;
+
 		$total_courses = [];
 		foreach ($summary_elements as $e) {
 			$index = $e['id'];
@@ -609,14 +619,10 @@ if ( ! function_exists( 'ecomfub_fi_count_section_progress' ) ) {
 		//get completed courses
 		$user_status_values = eltdf_lms_get_user_courses_status(null,$course_id);
 		$items_completed = $user_status_values[ $course_id ]['items_completed'];
-		//find out how many of each $total_courses are also in $items_completed
-		$result = array_intersect($items_completed, $total_courses);
-		$ret = sizeof($result);
-
-
-		return $ret;
+		return array_intersect($items_completed, $total_courses);;
 	}
 }
+
 
 if ( ! function_exists( 'eltdf_lms_complete_item' ) ) {
 	function eltdf_lms_complete_item() {
