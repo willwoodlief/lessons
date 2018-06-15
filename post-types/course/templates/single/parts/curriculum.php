@@ -35,8 +35,9 @@ if(!empty($course_sections)) {
 	                        if ( ! empty( $sectionElements ) ) {
 		                        $lists = eltdf_lms_get_course_curriculum_list( $sectionElements );
 		                        $number_of_elements = count($lists['elements']);
+		                        $completed_courses_count = ecomfub_fi_count_section_progress($lists['elements']);
 		                        ?>
-	                            <span class="eltdf-section-name-lessons"><?php echo esc_html_e('0/', 'eltdf-lms') . esc_attr($number_of_elements); ?></span>
+	                            <span class="eltdf-section-name-lessons"><?= esc_attr($completed_courses_count) .'/'. esc_attr($number_of_elements); ?></span>
 	                        <?php
 	                        }
                         } ?>

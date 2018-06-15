@@ -63,6 +63,22 @@ if ( ! function_exists( 'ecomhub_fi_user_section_progress' ) ) {
 		if (!get_current_user_id()) {
 			return ['last_unlocked_section' => -1,'next_unlock_span' => null, 'human' => 'Not Registered'];
 		}
+		//get the
+		$ecom_fi_options = get_option( 'ecomhub_fi_options' );
+		if (!$ecom_fi_options) {
+			$whitelist = [];
+		} else {
+			$whitelist = $ecom_fi_options['time_lock_whitelist'];
+		}
+		$b_is_whitelisted = false;
+		//see if user is on whitelist
+		$user_email = wp_get_current_user()->user_email;
+		foreach ($whitelist as $test_email) {
+			if ($test_email == $user_email) {
+				$b_is_whitelisted = true;
+				break;
+			}
+		}
 		$start_times = get_user_meta( get_current_user_id(), 'ecomhub_fi_user_start_course', true );
 		if (!$start_times) {
 			$start_times = [];
@@ -73,7 +89,12 @@ if ( ! function_exists( 'ecomhub_fi_user_section_progress' ) ) {
 			$now = time();
 			$diff = $now - $start;
 			$time_per_section = (60*60 * 24 * 6) + (60*60*4); // 24*6 + 4 days and hours
+			if ($b_is_whitelisted) {
+				$time_per_section = 1;
+			}
 			$section = intval(floor($diff / $time_per_section));
+
+
 			$left_over = fmod($diff,$time_per_section);
 			$next_time_unlock = ($section +1) * $time_per_section;
 			$wait_remaining =  $next_time_unlock - $left_over;
