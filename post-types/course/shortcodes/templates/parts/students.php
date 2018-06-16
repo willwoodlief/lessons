@@ -1,9 +1,11 @@
 <?php
+$boost = intval(get_post_meta( get_the_ID(), 'ecomhub_fi_membership_base', true ));
+
 $students        = get_post_meta( get_the_ID(), 'eltdf_course_users_attended', true );
 if (empty($students)) {
-    $students_number = 0;
+    $students_number = $boost;
 } else {
-	$students_number = count( $students );
+	$students_number = count( $students ) + $boost;
 }
 
 ?>

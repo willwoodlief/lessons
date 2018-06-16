@@ -648,7 +648,12 @@ if ( ! function_exists( 'ecomfub_fi_get_completed_hash' ) ) {
 		$course_id = get_the_ID();
 		//get completed courses
 		$user_status_values = eltdf_lms_get_user_courses_status(null,$course_id);
-		$items_completed = $user_status_values[ $course_id ]['items_completed'];
+
+		if (array_key_exists($course_id,$user_status_values)) {
+			$items_completed = $user_status_values[ $course_id ]['items_completed'];
+		} else {
+			$items_completed = [];
+		}
 		return array_intersect($items_completed, $total_courses);;
 	}
 }

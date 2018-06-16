@@ -165,14 +165,15 @@ class CourseFeatures implements Lib\ShortcodeInterface {
 	public function getCourseStudentsHtml( $params ) {
 		$html      = '';
 		$course_id = $params['course_id'];
-		
+
+		$boost = intval(get_post_meta( $course_id, 'ecomhub_fi_membership_base', true ));
 		$students = get_post_meta( $course_id, 'eltdf_course_users_attended', true );
 		
 		if ( $params['course_students'] == 'yes' && $students != '' ) {
 			$html = '<li class="eltdf-feature-item">';
 			$html .= '<span class="eltdf-item-icon"><i class="lnr lnr-users" aria-hidden="true"></i></span>';
 			$html .= '<span class="eltdf-item-label">' . esc_html__( 'Students', 'eltdf-lms' ) . '</span>';
-			$html .= '<span class="eltdf-item-value">' . count($students) . '</span>';
+			$html .= '<span class="eltdf-item-value">' . ( count($students) + $boost) . '</span>';
 			$html .= '</li>';
 		}
 		
