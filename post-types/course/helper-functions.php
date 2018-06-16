@@ -321,6 +321,10 @@ if ( ! function_exists( 'eltdf_lms_include_course_payment_class' ) ) {
 	add_action( 'init', 'eltdf_lms_include_course_payment_class', 1000 );
 }
 
+
+
+
+
 if ( ! function_exists( 'eltdf_lms_add_course_to_post_types_payment' ) ) {
 	/**
 	 * Function that add custom post type to list
@@ -338,22 +342,48 @@ if ( ! function_exists( 'eltdf_lms_add_course_to_post_types_payment' ) ) {
 
 if ( ! function_exists( 'eltdf_lms_course_add_to_cart_action' ) ) {
 	function eltdf_lms_course_add_to_cart_action( $add_to_cart_url ) {
+
+		if (! isset($_REQUEST['add-to-cart'] )) {
+			return true;
+		}
+
 		$product_id        = apply_filters( 'woocommerce_add_to_cart_product_id', absint( $_REQUEST['add-to-cart'] ) );
+		if (!$product_id) {
+			return true;
+		}
+
+		$url_for_checkout = get_site_url(null,'checkout');
+		// if already added to cart, go to checkout
+		foreach(WC()->cart->get_cart() as $key => $val ) {
+			$_product = $val['data'];
+
+			if($product_id == $_product->get_id() ) {
+				wp_safe_redirect($url_for_checkout);
+				exit;
+			}
+		}
+
 		$product           = new WC_Product_Course( $product_id );
 		$url               = $product->add_to_cart_url();
 		$quantity          = empty( $_REQUEST['quantity'] ) ? 1 : wc_stock_amount( $_REQUEST['quantity'] );
 		$passed_validation = true;
-		
-		if ( $passed_validation && WC()->cart->add_to_cart( $product_id, $quantity ) !== false ) {
+		$go_to_checkout          = (isset( $_REQUEST['go_to_checkout']) && (intval($_REQUEST['go_to_checkout']) > 1) ) ? false : true;
+		$add_to_cart_response = WC()->cart->add_to_cart( $product_id, $quantity );
+		if ( $passed_validation &&  $add_to_cart_response !== false ) {
 			wc_add_to_cart_message( array( $product_id => $quantity ), true );
 			// If has custom URL redirect there
-			if ( $url ) {
+			if ($go_to_checkout) {
+				wp_safe_redirect($url_for_checkout);
+				exit;
+			} elseif( $url ) {
 				wp_safe_redirect( $url );
 				exit;
 			} elseif ( get_option( 'woocommerce_cart_redirect_after_add' ) === 'yes' ) {
 				wp_safe_redirect( wc_get_cart_url() );
 				exit;
 			}
+
+
 		}
 	}
 	

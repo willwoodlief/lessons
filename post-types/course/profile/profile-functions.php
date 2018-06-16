@@ -178,6 +178,7 @@ if ( ! function_exists( 'eltdf_lms_user_has_course' ) ) {
 				}
 			}
 		}
+		return false;
 	}
 }
 
