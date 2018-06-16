@@ -808,6 +808,15 @@ if ( ! function_exists( 'eltdf_lms_get_user_courses_status' ) ) {
 				);
 
 			}
+		} elseif (! isset($user_status_values[$product_id_if_mising])) {
+			if ($product_id_if_mising) {
+				$user_status_values[$product_id_if_mising] = array(
+						'status'          => 'enrolled',
+						'items_completed' => array(),
+						'retakes'         => 0
+				);
+
+			}
 		}
 		
 		return $user_status_values;
