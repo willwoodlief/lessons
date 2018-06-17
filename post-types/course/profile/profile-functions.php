@@ -88,7 +88,8 @@ if ( ! function_exists( 'ecomhub_fi_user_section_progress' ) ) {
 			$start = $start_times[$id];
 			$now = time();
 			$diff = $now - $start;
-			$time_per_section = (60*60 * 24 * 6) + (60*60*4); // 24*6 + 4 days and hours
+			// $time_per_section = (60*60 * 24 * 6) + (60*60*4); // 24*6 + 4 days and hours
+			$time_per_section = (60*60 * 24 * 6) + (60*60*18); //todo Monday 7pm CST
 			if ($b_is_whitelisted) {
 				$time_per_section = 1;
 			}
