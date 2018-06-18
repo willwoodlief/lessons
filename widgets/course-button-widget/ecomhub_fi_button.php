@@ -44,11 +44,11 @@ class EcomhubFiCourseButtonWidget extends eSmartsElatedClassWidget {
 				'name'  => 'height',
 				'title' => esc_html__( 'The Height of the Button. Needs to have unit after it (px,em etc) no spaces', 'eltdf-lms' )
 			),
-			array(
-				'type'  => 'textfield',
-				'name'  => 'width',
-				'title' => esc_html__( 'The Width of the Button. Needs to have unit after it (px,em etc) no spaces', 'eltdf-lms' )
-			),
+//			array(
+//				'type'  => 'textfield',
+//				'name'  => 'width',
+//				'title' => esc_html__( 'The Width of the Button. Needs to have unit after it (px,em etc) no spaces', 'eltdf-lms' )
+//			),
 			array(
 				'type'  => 'textfield',
 				'name'  => 'margin_bottom',
@@ -122,11 +122,18 @@ class EcomhubFiCourseButtonWidget extends eSmartsElatedClassWidget {
 
 			if ($do_this_course) {
 				$course_title = get_the_title( $do_this_course );
+				$b_check = preg_match("/(?<name>(module|bonus)\s*#?\d*)(.*)/i", $course_title, $output_array);
+				if (($b_check !== false) && isset($output_array) && isset($output_array['name'])) {
+				    $da_title = $output_array['name'];
+                } else {
+					$da_title =  $course_title;
+                }
+
 				$course_url   = get_the_permalink( $do_this_course );
 				$anchor_link = '<a class="eltdf-element-name eltdf-element-link-open" style = "display:none" itemprop="url" href="'.
-				               $course_url.'" title="' . esc_attr($course_title ).
+				               $course_url.'" title="' . esc_attr($da_title ).
 				               '" data-item-id="'.$do_this_course.'" data-course-id="'.$course_id.'" id = "ecomhub-fi-magic-link">'.
-				               $course_title . '</a>';
+				               $da_title . '</a>';
 			}
 
 		}
@@ -153,14 +160,14 @@ class EcomhubFiCourseButtonWidget extends eSmartsElatedClassWidget {
 			case 'continue':
 			case 'start': {
 				if ($width && $height) {
-					$style = " style='width: $width ; height:  $height ; ' ";
+					$style = " style=' height:  $height ; ' ";
 				} else {
-					$style = '';
+					$style = 'style="width:100%"';
 				}
 				?>
 				<button type="button" class="eltdf-btn eltdf-btn-medium eltdf-btn-solid eltdf-btn-default "
 					<?= $style ?>  name="ws-add-to-cart" id="ecomhub-fi-da-button">
-					<span class="eltdf-btn-text"  <?= $style ?> >  <?= $button_text ?>  <span style="font-style: italic"> <?= $course_title ?></span></span>
+					<span class="eltdf-btn-text"  <?= $style ?> >  <?= $button_text ?>  <span style="font-style: italic"> <?= $da_title ?></span></span>
 				</button>
 				<?= $anchor_link ?>
 				<script>
