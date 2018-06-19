@@ -94,11 +94,18 @@ if ( ! function_exists( 'ecomhub_fi_user_section_progress' ) ) {
 				$time_per_section = 1;
 			}
 			$section = intval(floor($diff / $time_per_section));
+			if ($section < 1) {
+				$special_subtraction =  $time_per_section * 1;
+				$section = 1;
+			} else {
+				$special_subtraction = 0;
+			}
+
 
 
 			$left_over = fmod($diff,$time_per_section);
 			$next_time_unlock = ($section +1) * $time_per_section;
-			$wait_remaining =  $next_time_unlock - $left_over;
+			$wait_remaining =  $next_time_unlock - $left_over - $special_subtraction;
 
 
 
@@ -121,14 +128,19 @@ if ( ! function_exists( 'ecomhub_fi_user_section_progress' ) ) {
 				  elseif ($new_wait > 60*60*24 * 2) {
 					$days = intval(floor($new_wait/(60*60*24)));
 					$human = "$days Days";
-				} elseif ($new_wait > 60*60*24 * 1) {
-					$human = "1 Day";
-				} elseif ($new_wait > 60*60*24 ) {
+				}  elseif ($new_wait > 60*60*24 ) {
 					//hours and minutes
 					$hours = intval(floor($new_wait/(60*60)));
-					$minutes = intval(floor($new_wait- ($hours*60*60)/60));
-					$human = "$hours Hours $minutes $minutes";
-				} else {
+					$minutes = intval(floor(($new_wait- ($hours*60*60))/60));
+					$human = "$hours Hours $minutes Minutes";
+				}
+				elseif ($new_wait > 60*60 ) {
+					//hours and minutes
+					$hours = intval(floor($new_wait/(60*60)));
+					$minutes = intval(floor(($new_wait- ($hours*60*60))/60));
+					$human = "$hours Hours $minutes Minutes";
+				}
+				else {
 					//minutes and seconds if just an hour
 					$minutes = intval(floor($new_wait/60));
 					$seconds = intval(floor($new_wait-($minutes*60)));
