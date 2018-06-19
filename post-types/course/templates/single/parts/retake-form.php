@@ -1,4 +1,4 @@
-<form action="" method="post" class="eltdf-lms-retake-course-form">
+<form action="" method="post" class="eltdf-lms-retake-course-form" style="width: 100%">
 	<input type="hidden" name="eltdf_lms_course_id" value="<?php echo get_the_ID(); ?>"/>
 
     <?php
@@ -18,19 +18,22 @@
 		    'input_name' => 'submit'
 	    ) );
 
-	    if (isset($height) && isset($width)) {
-		    preg_match("/(?P<first>\<button|\<input)([\s]*)(?P<last>type.*)/", $button_html, $output_array);
-		    $button_html = $output_array['first'] . "  style='width: $width ; height:  $height ; '  " .  $output_array['last'];
+	    preg_match("/(?P<first>\<button|\<input)([\s]*)(?P<last>type.*)/", $button_html, $output_array);
+	    if (isset($height)) {
+
+		    $button_html = $output_array['first'] . "  style='width: 100% ; height:  $height ; '  " .  $output_array['last'];
+        } else {
+		    $button_html = $output_array['first'] . "  style='width: 100% ; '  " .  $output_array['last'];
         }
 
 	    echo $button_html;
 
 	    ?>
 	<?php } else {
-		if ($width && $height) {
-			$style = " style='width: $width ; height:  $height ; ' ";
+		if ( $height) {
+			$style = " style=' height:  $height ;width:100% ' ";
 		} else {
-			$style = '';
+			$style = "style= 'width:100%;'";
 		}
 		?>
 		<input name="submit"  <?=  $style ?>type="submit" value="<?php echo $text_of_button; ?>"/>

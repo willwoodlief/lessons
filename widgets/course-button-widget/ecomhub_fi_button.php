@@ -147,7 +147,6 @@ class EcomhubFiCourseButtonWidget extends eSmartsElatedClassWidget {
 		}
 
 
-
 		$margin_top = isset($instance['margin_bottom'])? $instance['margin_bottom'] : '1em';
 		echo "<div style='text-align: center; margin-bottom: $margin_top'>";
 		switch ($action) {
