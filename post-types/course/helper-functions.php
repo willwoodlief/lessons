@@ -531,14 +531,14 @@ if ( ! function_exists( 'eltdf_lms_get_buy_form' ) ) {
 					eltdf_lms_get_cpt_single_module_template_part( 'templates/single/parts/prerequired-info', 'course', '', $params );
 				} else {
 					if ( $user_current_course_status == 'completed' && ( eltdf_lms_check_retakes_option() > eltdf_lms_user_current_course_retakes() ) ) {
-						eltdf_lms_get_cpt_single_module_template_part( 'templates/single/parts/retake-form', 'course', '', $params );
+		//				eltdf_lms_get_cpt_single_module_template_part( 'templates/single/parts/retake-form', 'course', '', $params );
 					}
 					eltdf_lms_get_cpt_single_module_template_part( 'templates/single/parts/progress-bar', 'course', '', $params );
 				}
 			} elseif ( eltdf_lms_check_is_course_in_cart() ) {
-				eltdf_lms_get_cpt_single_module_template_part( 'templates/single/parts/cart-button', 'course', '', $params );
+		//		eltdf_lms_get_cpt_single_module_template_part( 'templates/single/parts/cart-button', 'course', '', $params );
 			} elseif ( eltdf_lms_eltdf_woocommerce_integration_installed() ) {
-				eltdf_woocomerce_checkout_integration_get_buy_form( array(), array( 'input_text' => esc_html__( 'Buy Course', 'eltdf-lms' ) ) );
+		//		eltdf_woocomerce_checkout_integration_get_buy_form( array(), array( 'input_text' => esc_html__( 'Buy Course', 'eltdf-lms' ) ) );
 			}
 			//this should move from this function when sidebar created
 		}
