@@ -54,16 +54,16 @@ if ( ! function_exists( 'ecomhub_fi_user_section_progress' ) ) {
 
 	/**
 	 * returns 0 based index of section unlocked, as well as the seconds until next unlock
+	 * @param integer $user_id
 	 * @param string $id
 	 *
-	 * @return array (last_unlocked_section, next_unlock_span)
+	 * @return array section id numbered: {is_readable, is_locked: boolean, human: string of time duration }
 	 */
-	function ecomhub_fi_user_section_progress( $id = '' ) {
+	function ecomhub_fi_user_section_progress( $user_id,$id = '' ) {
 		$id               = $id === '' ? get_the_ID() : $id;
-		if (!get_current_user_id()) {
-			return ['last_unlocked_section' => -1,'next_unlock_span' => null, 'human' => 'Not Registered'];
-		}
-		//get the
+
+
+		// do the whitelist stuff
 		$ecom_fi_options = get_option( 'ecomhub_fi_options' );
 		if (!$ecom_fi_options) {
 			$whitelist = [];
@@ -72,87 +72,149 @@ if ( ! function_exists( 'ecomhub_fi_user_section_progress' ) ) {
 		}
 		$b_is_whitelisted = false;
 		//see if user is on whitelist
-		$user_email = wp_get_current_user()->user_email;
-		foreach ($whitelist as $test_email) {
-			if ($test_email == $user_email) {
-				$b_is_whitelisted = true;
-				break;
+		if ($user_id) {
+			$user = get_user_by( 'ID', $user_id );
+			$user_email = $user->user_email;
+			foreach ($whitelist as $test_email) {
+				if ($test_email == $user_email) {
+					$b_is_whitelisted = true;
+					break;
+				}
 			}
 		}
-		$start_times = get_user_meta( get_current_user_id(), 'ecomhub_fi_user_start_course', true );
-		if (!$start_times) {
-			$start_times = [];
+
+
+		$start = -1;
+		if ($user_id) {
+			$start_times = get_user_meta( $user_id, 'ecomhub_fi_user_start_course', true );
+			if (!$start_times) {
+				$start_times = [];
+			}
+
+
+			if (array_key_exists($id,$start_times)) {
+				$start = $start_times[ $id ];
+			}
 		}
 
-		if (array_key_exists($id,$start_times)) {
-			$start = $start_times[$id];
+
+		$ret = [];
+		// if start < 0 then is_readable is false and is_locked = true and human is "Need to Purchase"
+		// if on whitelist then is_readable is true and is_locked = false and human = ''
+		for($u = 0; $u < 100; $u++) {
+			$node = ['is_readable'=> false, 'is_locked' => true, 'human'=>"Need to Purchase Course"];
+			if ($start < 0 && !$b_is_whitelisted)  {
+				$ret[] = $node;
+				continue;
+			}
+
+			if ($b_is_whitelisted) {
+				$node = ['is_readable'=> true, 'is_locked' => false, 'human'=>"On Whitelist"];
+				$ret[] = $node;
+				continue;
+			}
+
+			//if got here then the person has a start timestamp >=0 , make the first two sections unlocked right away
+			if ($u < 2) {
+				$node = ['is_readable'=> true, 'is_locked' => false, 'human'=>"First two sections unlocked always"];
+				$ret[] = $node;
+				continue;
+			}
+			$node = [];
+			$section_unlocked_at_week = $u -1 ; // the week after the start timestamp the section is unlocked at,
+			// 0 means starting week, 1 is the week after that, 2 is two weeks after that etc
+
+
+
+			//so here, we see how many weeks they are along, based on their timestamp
+			$seconds_in_a_week = (60*60 * 24 * 7);
 			$now = time();
 			$diff = $now - $start;
-			// $time_per_section = (60*60 * 24 * 6) + (60*60*4); // 24*6 + 4 days and hours
-			$time_per_section = (60*60 * 24 * 6) + (60*60*18); //todo Monday 7pm CST
-			if ($b_is_whitelisted) {
-				$time_per_section = 1;
+			$weeks_unlocked = ceil($diff/$seconds_in_a_week);
+			$is_readable = true;
+			$node['debug_start_ts'] = $start;
+			$node['debug_start'] = date("D M d, Y G:i",$start);
+			$node['debug_weeks_unlocked'] = $weeks_unlocked;
+			$node['debug_email'] = $user->user_email;
+			$human = '';
+			$section_unlocks_at = $start + ($section_unlocked_at_week * $seconds_in_a_week);
+
+
+			//calculate minimum unlocks
+			// the first section to unlock is at Tuesday, June 26, 2018 7:30:30 AM
+			$min_section_unlock_time = (($section_unlocked_at_week -1) * $seconds_in_a_week) + 1530016230;
+
+			if ($section_unlocks_at < $min_section_unlock_time) {
+				$section_unlocks_at = $min_section_unlock_time;
 			}
-			$section = intval(floor($diff / $time_per_section));
-			if ($section < 1) {
-				$special_subtraction =  $time_per_section * 1;
-				$section = 1;
+
+			$node['debug_course_unlocks_at'] = date("D M d, Y G:i",$section_unlocks_at);
+			$total_time_from_now_needed_in_seconds = $section_unlocks_at - $now;
+			$node['debug_duration_til_unlock_days'] = $total_time_from_now_needed_in_seconds/(60*60*24);
+
+
+			if ($total_time_from_now_needed_in_seconds < 0) {
+				$is_locked = false;
+				$human = "unlocked";
 			} else {
-				$special_subtraction = 0;
+				$is_locked = true;
+
+				$seconds_in_a_day = 60*60*24;
+				$seconds_in_an_hour = 60*60;
+				$seconds_in_a_minute = 60;
+
+
+
+
+
+
+
+				$days = floor($total_time_from_now_needed_in_seconds/$seconds_in_a_day);
+				$left_over_from_day = $total_time_from_now_needed_in_seconds - ($days* $seconds_in_a_day);
+				$hours = floor($left_over_from_day  /$seconds_in_an_hour);
+				$left_over_from_hour =  $total_time_from_now_needed_in_seconds - ($days* $seconds_in_a_day) - ($hours* $seconds_in_an_hour);
+				$minutes = floor($left_over_from_hour  /$seconds_in_a_minute);
+				$seconds =  $total_time_from_now_needed_in_seconds - ($days* $seconds_in_a_day) - ($hours* $seconds_in_an_hour) - ($minutes * $seconds_in_a_minute);
+				if ($days > 0) {
+					if ($days == 1) {
+						$human .= "$days Day ";
+					} else {
+						$human .= "$days Days ";
+					}
+				}
+
+				if ($hours > 0) {
+					if ($hours == 1) {
+						$human .= "$hours Hour ";
+					} else {
+						$human .= "$hours Hours ";
+					}
+				}
+
+				if ($minutes > 0) {
+					if ($minutes == 1) {
+						$human .= "$minutes Minute ";
+					} else {
+						$human .= "$minutes Minutes ";
+					}
+				}
+
+				if ($days == 0 && $hours == 0 ) {
+					if ($days == 1) {
+						$human .= "$seconds Second ";
+					} else {
+						$human .= "$seconds Seconds ";
+					}
+				}
 			}
+			$node['is_readable'] =  $is_readable;
+			$node['is_locked'] = $is_locked;
+			$node['human'] = $human;
 
-
-
-			$left_over = fmod($diff,$time_per_section);
-			$next_time_unlock = ($section +1) * $time_per_section;
-			$wait_remaining =  $next_time_unlock - $left_over - $special_subtraction;
-
-
-
-			//add in lookup array of human wait times
-			$human_lookup = [];
-			for($u = 0; $u < 100; $u++) {
-				$new_wait = $wait_remaining + ($u * $time_per_section);
-
-				//get human time span
-				//rules
-				// if greater than one day , put out number of days
-				// if less than a day, put out number of hours
-				// hh:mm:ss on the last hour
-				// count down timer: MM:SS on the last minute
-				//
-				if ($new_wait > 60*60*24  * 7 *2) {
-					$weeks = intval(ceil($new_wait/(60*60*24*7)));
-					$human = "$weeks Weeks";
-				}
-				  elseif ($new_wait > 60*60*24 * 2) {
-					$days = intval(floor($new_wait/(60*60*24)));
-					$human = "$days Days";
-				}  elseif ($new_wait > 60*60*24 ) {
-					//hours and minutes
-					$hours = intval(floor($new_wait/(60*60)));
-					$minutes = intval(floor(($new_wait- ($hours*60*60))/60));
-					$human = "$hours Hours $minutes Minutes";
-				}
-				elseif ($new_wait > 60*60 ) {
-					//hours and minutes
-					$hours = intval(floor($new_wait/(60*60)));
-					$minutes = intval(floor(($new_wait- ($hours*60*60))/60));
-					$human = "$hours Hours $minutes Minutes";
-				}
-				else {
-					//minutes and seconds if just an hour
-					$minutes = intval(floor($new_wait/60));
-					$seconds = intval(floor($new_wait-($minutes*60)));
-					$human = "$minutes Minutes $seconds Seconds";
-				}
-				$human_lookup[$u] = $human;
-
-			}
-			return ['last_unlocked_section' => $section,'next_unlock_span' => $wait_remaining, 'human' => $human_lookup];
-		} else {
-			return ['last_unlocked_section' => -1,'next_unlock_span' => null, 'human' => 'Not Registered'];
+			$ret[]= $node;
 		}
+
+		return $ret;
 	}
 }
 
@@ -181,7 +243,7 @@ if ( ! function_exists( 'eltdf_lms_user_has_course' ) ) {
 					}
 
 					if (!array_key_exists($product_id,$start_times)) {
-						$start_times[$product_id] = time();
+						$start_times[$product_id] = time() ;
 						update_user_meta( get_current_user_id(), 'ecomhub_fi_user_start_course', $start_times );
 					}
 
@@ -231,8 +293,9 @@ if ( ! function_exists( 'eltdf_lms_get_user_profile_course_items' ) ) {
 				// changed by will, we have to filter a different way
 
 				foreach ( $items as $item_id => $item ) {
+					/** @noinspection PhpUndefinedMethodInspection */
 					$product_id = $item->get_product_id();
-					$post_type = get_post_type($product_id);
+					$post_type  = get_post_type($product_id);
 					if ( $post_type == "course") {
 						$item['order_status'] = $customer_order->get_status();
 						array_push( $formatted_orders, $item );

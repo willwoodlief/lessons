@@ -2,7 +2,7 @@
 $course_sections = get_post_meta(get_the_ID(), 'eltdf_course_curriculum', true);
 $course_curriculum_desc = get_post_meta(get_the_ID(), 'eltdf_course_curriculum_desc_meta', true);
 if(!empty($course_sections)) {
-    $unlocks = ecomhub_fi_user_section_progress();
+    $unlocks = ecomhub_fi_user_section_progress(get_current_user_id());
     $section_counter = 0;
     ?>
     <div class="eltdf-course-curriculum">
@@ -11,15 +11,17 @@ if(!empty($course_sections)) {
             <p><?php echo esc_attr( $course_curriculum_desc); ?></p>
         </div>
         <div class="eltdf-course-curriculum-list">
-            <?php foreach($course_sections as $course_section) {                ?>
+            <?php foreach($course_sections as $course_section) {
+                $section_lock = $unlocks[$section_counter];
+                ?>
                 <div class="eltdf-curriculum-section" style="position: relative;z-index: 1">   <!--todo head of section -->
-                    <?php if ( ($unlocks['last_unlocked_section'] >= 0) && ($section_counter > $unlocks['last_unlocked_section'])) { ?>
+                    <?php if ( $section_lock['is_readable'] && $section_lock['is_locked']) { ?>
                         <div class="ecomhub-fi-locked-section" style="z-index: 999998;position: absolute;width: 100%;height: 100%; top:0;left: 0; background-color: transparent; opacity: 0.25" data-section="<?=$section_counter?>" data-oo="curriculum"></div>
-                        <div class="ecomhub-fi-locked-description" style="z-index: 999999;position: absolute;width: 6em;height: 6em; top:40%;left: 40% ">
+                        <div class="ecomhub-fi-locked-description" style="z-index: 999999;position: absolute;width: 18em;height: 6em; top:40%;left: 30% ">
                             <div style="text-align: center;padding: 0.5em;background-color: #fbfbfb">
                                 <span class="ecomhub-fi-lock-image fa fa-lock" style="color:#3A4242;font-size: 3em"></span>
                                 <br>
-                                <span class="ecomhub-fi-lock-human-span" style="color: black"><?= $unlocks['human'][$section_counter-1] ?></span>
+                                <span class="ecomhub-fi-lock-human-span" style="color: black"><?= $section_lock['human']?></span>
                             </div>
                         </div>
                     <?php
@@ -95,7 +97,7 @@ if(!empty($course_sections)) {
                                                 </span>
 
                                                 <!--  preview course link in curriculum -->
-	                                            <?php if ( eltdf_lms_course_is_preview_available( $element['id'] )  && ( ($unlocks['last_unlocked_section'] >= 0) && ($section_counter <= $unlocks['last_unlocked_section']))) { ?>
+	                                            <?php if ( eltdf_lms_course_is_preview_available( $element['id'] )  &&  ($section_lock['is_readable']) && (!$section_lock['is_locked'])) { ?>
 		                                            <a class="eltdf-element-name eltdf-element-link-open" itemprop="url" href="<?php echo esc_attr( $element['url'] ); ?>" title="<?php echo esc_attr( $element['title'] ); ?>" data-item-id="<?php echo esc_attr( $element['id'] ); ?>" data-course-id="<?php echo get_the_ID(); ?>">
 			                                            <?php echo esc_html( $element['title'] ) . $completed_html; ?>
 			                                            <?php if ( ! eltdf_lms_user_has_course() || ! eltdf_lms_user_completed_prerequired_course() ) { ?>

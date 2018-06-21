@@ -7,13 +7,13 @@ $next_item_id = ( array_key_exists( $current_id + 1, $items ) ) ? $items[ $curre
 $section_lookup = ecomhub_fi_course_items_section_lookup($course_id);
 $prev_section = $section_lookup[$prev_item_id];
 $next_section = $section_lookup[$next_item_id];
-$unlocks = ecomhub_fi_user_section_progress($course_id);
-
-if ( ! (($unlocks['last_unlocked_section'] >= 0) && ($prev_section <= $unlocks['last_unlocked_section']))) {
+$unlocks = ecomhub_fi_user_section_progress(get_current_user_id(),$course_id);
+$prev_unlock = $unlocks[$prev_section];
+if ( $prev_unlock &&  $prev_unlock['is_locked']) {
 	$prev_item_id = '';
 }
-
-if ( ! (($unlocks['last_unlocked_section'] >= 0) && ($next_section <= $unlocks['last_unlocked_section'])) ){
+$next_unlock = $unlocks[$next_section];
+if ( $next_unlock &&   $next_unlock['is_locked'] ){
 	$next_item_id = '';
 }
 ?>
