@@ -177,6 +177,7 @@ if ( ! function_exists( 'eltdf_lms_single_course_tabs' ) ) {
 		if ( ! empty( $forum_id ) ) {
 			$forum_link = get_permalink( $forum_id );
 		}
+		$forum_link = get_home_url(null,'forum','https'); //added by will to set the forum url
 		
 		// Description tab - shows course content
 		if ( $show_content ) {
@@ -217,7 +218,7 @@ if ( ! function_exists( 'eltdf_lms_single_course_tabs' ) ) {
 				'template' => 'members'
 			);
 		}
-		
+
 		// Forum tab - shows forum
 		if ( $show_forum ) {
 			$tabs['forum'] = array(
