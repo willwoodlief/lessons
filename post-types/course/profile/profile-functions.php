@@ -141,8 +141,8 @@ if ( ! function_exists( 'ecomhub_fi_user_section_progress' ) ) {
 
 
 			//calculate minimum unlocks
-			// the first section to unlock is at Tuesday, June 26, 2018 7:30:30 AM
-			$min_section_unlock_time = (($section_unlocked_at_week -1) * $seconds_in_a_week) + 1530016230;
+			// the first section to unlock is at Monday, June 25, 2018 7:30:30 AM GMT-05:00  (CST)
+			$min_section_unlock_time = (($section_unlocked_at_week -1) * $seconds_in_a_week) + 1529929830;
 
 			if ($section_unlocks_at < $min_section_unlock_time) {
 				$section_unlocks_at = $min_section_unlock_time;
