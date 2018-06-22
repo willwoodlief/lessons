@@ -1249,17 +1249,24 @@ if ( ! function_exists( 'ecomhub_fi_conditional_redirect_forums' ) ) {
 					foreach ($post_res as $ps) {
 						$posts_ids[] = $ps->id;
 					}
+				} else {
+					//silently block on db error
 				}
 
 
+				//get the user meta data for the course starting
+				$start_times = get_user_meta( get_current_user_id(), 'ecomhub_fi_user_start_course', true );
+				if (!empty($start_times) && is_array($start_times)) {
+					foreach ($posts_ids as $pid) {
+						if (array_key_exists($pid,$start_times)) {
+							$b_owns = true;
+							break;
+						}
+				}
+				}
 				//the user has to own at least one course
 
-				foreach ($posts_ids as $pid) {
-					if (eltdf_lms_user_has_course($pid)) {
-						$b_owns = true;
-						break;
-					}
-				}
+
 			}
 
 			//check if user has course, if not then redirect
