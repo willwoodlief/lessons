@@ -82,23 +82,25 @@ div.eltdf-sidebar-holder.sticky {
   $(function() {
       var el_window = $(window),
        stickyEl = $('div.eltdf-sidebar-holder'),
+      // stickyEl = $('aside.eltdf-sidebar');
        elTop = stickyEl.offset().top - 100;
        var rem_width = stickyEl.width();
        var rem_offset_left = stickyEl.offset().left;
-       var rem_parent = $('.eltdf-sidebar-holder.eltdf-grid-col-4');
+    //   var rem_parent = $('.eltdf-sidebar-holder.eltdf-grid-col-4');
        
   //debugger;
    el_window.scroll(function() {
-        stickyEl.toggleClass('sticky', el_window.scrollTop() > elTop);
+       // stickyEl.toggleClass('sticky', el_window.scrollTop() > elTop);
         if (el_window.scrollTop() > elTop) {
+            stickyEl.addClass('sticky');
             stickyEl.width(rem_width);
             stickyEl.css( 'left', rem_offset_left );
         } else {
-            rem_width = stickyEl.width();
-            rem_offset_left = stickyEl.offset().left;
-            stickyEl.css( 'left', 0 );
+          //  rem_width = stickyEl.width();
+          //  rem_offset_left = stickyEl.offset().left;
+          //  stickyEl.css( 'left', 0 );
          //   console.log('normal');
-            rem_parent.prepend(stickyEl);
+   //         rem_parent.prepend(stickyEl);
         }
          
     });
