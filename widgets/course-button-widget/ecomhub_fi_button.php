@@ -75,8 +75,6 @@ div.eltdf-sidebar-holder.sticky {
      position: fixed;
      left: 66.66667%;
      top: 100px;
-     margin-top: 70px;
-     margin-bottom: 500px;
   }
   }
   </style>
@@ -84,25 +82,20 @@ div.eltdf-sidebar-holder.sticky {
   $(function() {
       var el_window = $(window),
        stickyEl = $('div.eltdf-sidebar-holder'),
-      // stickyEl = $('aside.eltdf-sidebar');
        elTop = stickyEl.offset().top - 100;
        var rem_width = stickyEl.width();
        var rem_offset_left = stickyEl.offset().left;
-    //   var rem_parent = $('.eltdf-sidebar-holder.eltdf-grid-col-4');
        
-  //debugger;
+//debugger;
    el_window.scroll(function() {
-       // stickyEl.toggleClass('sticky', el_window.scrollTop() > elTop);
+        stickyEl.toggleClass('sticky', el_window.scrollTop() > elTop);
         if (el_window.scrollTop() > elTop) {
-            stickyEl.addClass('sticky');
             stickyEl.width(rem_width);
             stickyEl.css( 'left', rem_offset_left );
         } else {
-          //  rem_width = stickyEl.width();
-          //  rem_offset_left = stickyEl.offset().left;
-          //  stickyEl.css( 'left', 0 );
-         //   console.log('normal');
-   //         rem_parent.prepend(stickyEl);
+            rem_width = stickyEl.width();
+            rem_offset_left = stickyEl.offset().left;
+            stickyEl.css( 'left', 0 );
         }
          
     });
@@ -111,9 +104,8 @@ div.eltdf-sidebar-holder.sticky {
        if (stickyEl.hasClass('sticky')) {
            stickyEl.removeClass('sticky');
            stickyEl.css( 'left', 0 );
-     //      rem_parent.prepend(stickyEl);
      //      elTop = stickyEl.offset().top - 100;
-           rem_offset_left = stickyEl.offset().left;
+     //      rem_offset_left = stickyEl.offset().left;
        }
    });
   })
