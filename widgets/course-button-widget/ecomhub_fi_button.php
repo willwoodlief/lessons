@@ -75,7 +75,7 @@ div.eltdf-sidebar-holder.sticky {
      position: fixed;
      left: 66.66667%;
      top: 100px;
-     margin-top: 75px;
+     margin-top: 70px;
      margin-bottom: 500px;
   }
   }
