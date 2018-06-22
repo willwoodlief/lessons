@@ -1224,7 +1224,12 @@ if ( ! function_exists( 'eltdf_lms_course_override_search_title' ) ) {
 
 
 if ( ! function_exists( 'ecomhub_fi_conditional_redirect_forums' ) ) {
+	/**
+	 * @return void
+	 */
 	function ecomhub_fi_conditional_redirect_forums(  ) {
+		global $wpdb;
+		$post_table_name = $wpdb->prefix . 'posts';
 
 		$page_going_to = $_SERVER["REQUEST_URI"];
 		$b_ok = preg_match("/.*\/forum($|\/)/", $page_going_to, $output_array);
@@ -1232,7 +1237,20 @@ if ( ! function_exists( 'ecomhub_fi_conditional_redirect_forums' ) ) {
 			$b_owns = false;
 			if ( get_current_user_id()) {
 				//get all the courses
-				$posts_ids = get_posts('post_type=course&posts_per_page=-1&fields=ids');
+				$post_res = $wpdb->get_results( /** @lang text */
+					"
+				select  p.ID as 'id'  from $post_table_name p
+				where post_type='course';"
+				);
+
+				$posts_ids = [];
+				if (!$wpdb->last_error) {
+					if (empty($post_res)) {return ;}
+					foreach ($post_res as $ps) {
+						$posts_ids[] = $ps->id;
+					}
+				}
+
 
 				//the user has to own at least one course
 
