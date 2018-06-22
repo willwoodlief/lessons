@@ -67,6 +67,50 @@ class EcomhubFiCourseButtonWidget extends eSmartsElatedClassWidget {
 		if ( ! is_array( $instance ) ) {
 			$instance = array();
 		}
+
+		echo
+		"<style>
+		@media screen and (min-width: 1025px) {
+div.eltdf-sidebar-holder.sticky {
+     position: fixed;
+     left: 66.66667%;
+     top: 100px;
+  }
+  }
+  </style>
+  <script>
+  $(function() {
+      var el_window = $(window),
+       stickyEl = $('div.eltdf-sidebar-holder'),
+       elTop = stickyEl.offset().top - 100;
+       var rem_width = stickyEl.width();
+       var rem_offset_left = stickyEl.offset().left;
+       
+//debugger;
+   el_window.scroll(function() {
+        stickyEl.toggleClass('sticky', el_window.scrollTop() > elTop);
+        if (el_window.scrollTop() > elTop) {
+            stickyEl.width(rem_width);
+            stickyEl.css( 'left', rem_offset_left );
+        } else {
+            rem_width = stickyEl.width();
+            rem_offset_left = stickyEl.offset().left;
+            stickyEl.css( 'left', 0 );
+        }
+         
+    });
+   
+   $( window ).resize(function() {
+       if (stickyEl.hasClass('sticky')) {
+           stickyEl.removeClass('sticky');
+           stickyEl.css( 'left', 0 );
+     //      elTop = stickyEl.offset().top - 100;
+           rem_offset_left = stickyEl.offset().left;
+       }
+   });
+  })
+</script>
+";
 		
 		// Filter out all empty params
 		$instance = array_filter( $instance, function ( $array_value ) {
