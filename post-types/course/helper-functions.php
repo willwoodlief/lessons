@@ -301,7 +301,7 @@ if ( ! function_exists( 'eltdf_lms_get_course_curriculum_list' ) ) {
 			'elements'        => $elements
 		);
 		
-		return $params; //todo here
+		return $params;
 	}
 }
 
@@ -1220,6 +1220,40 @@ if ( ! function_exists( 'eltdf_lms_course_override_search_title' ) ) {
 	}
 	
 	add_filter( 'esmarts_elated_filter_title_text', 'eltdf_lms_course_override_search_title', 10, 1 );
+}
+
+
+if ( ! function_exists( 'ecomhub_fi_conditional_redirect_forums' ) ) {
+	function ecomhub_fi_conditional_redirect_forums(  ) {
+
+		$page_going_to = $_SERVER["REQUEST_URI"];
+		$b_ok = preg_match("/.*\/forum($|\/)/", $page_going_to, $output_array);
+		if ($b_ok) {
+			$b_owns = false;
+			if ( get_current_user_id()) {
+				//get all the courses
+				$posts_ids = get_posts('post_type=course&posts_per_page=-1&fields=ids');
+
+				//the user has to own at least one course
+
+				foreach ($posts_ids as $pid) {
+					if (eltdf_lms_user_has_course($pid)) {
+						$b_owns = true;
+						break;
+					}
+				}
+			}
+
+			//check if user has course, if not then redirect
+			if (!$b_owns) {
+				$url = get_home_url();
+				wp_redirect($url);
+				exit();
+			}
+		}
+	}
+
+	add_action( 'init', 'ecomhub_fi_conditional_redirect_forums' );
 }
 
 if ( ! function_exists( 'eltdf_lms_search_courses' ) ) {
