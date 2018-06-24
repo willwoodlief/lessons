@@ -76,7 +76,7 @@ if ( ! empty( $course_sections ) ) {
 									<?php } ?>
 									<?php
 
-									$completed_html_template = '<span class="lnr lnr-checkmark-circle" style="font-size: 14px;width: 1em;margin-left: 1em;color: #468bff">  </span> ';
+									$completed_html_template = '<span class="lnr lnr-checkmark-circle" style="font-size: 14px;width: 1em;margin-right: 0.25em;color: #468bff">  </span> ';
 									$incompleted_html_template = '<span class="" style="font-size: 14px;width: 1em;margin-left: 1em;color: #468bff">  </span> ';
 									$completed_lessons       = ecomfub_fi_get_completed_array( $lists['elements'] );
 
@@ -121,7 +121,7 @@ if ( ! empty( $course_sections ) ) {
 												<?php if ( $element['class'] !== 'eltdf-section-quiz' ) { ?>
                                                     <span class="eltdf-element-clock-icon lnr lnr-clock"></span>
 												<?php } ?>
-                                                <div style="width: 6em;display: inline-block">
+                                                <div style="width: 5em;display: inline-block; text-align: right; margin-left: 0.25em">
                                                     <span class="eltdf-element-extra-info-value" style="">
                                                         <?php echo esc_html( $element['extra_info_value'] ); ?>
                                                     </span>
