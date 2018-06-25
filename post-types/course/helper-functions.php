@@ -217,16 +217,19 @@ if ( ! function_exists( 'eltdf_lms_single_course_tabs' ) ) {
 				'template' => 'members'
 			);
 		}
-
+		$show_forum = true;
 		// Forum tab - shows forum
 		if ( $show_forum ) {
-			$tabs['forum'] = array(
-				'title'    => __( 'Forum', 'eltdf-lms' ),
-				'icon'     => '<i class="lnr lnr-bubble" aria-hidden="true"></i>',
-				'priority' => 40,
-				'template' => 'forum',
-				'link'     => $forum_link
-			);
+			$b_owns = ecomhub_fi_safe_does_own_any_courses(get_current_user_id());
+			if ($b_owns) {
+				$tabs['forum'] = array(
+					'title'    => __( 'Forum', 'eltdf-lms' ),
+					'icon'     => '<i class="lnr lnr-bubble" aria-hidden="true"></i>',
+					'priority' => 40,
+					'template' => 'forum',
+					'link'     => $forum_link
+				);
+			}
 		}
 
 		return $tabs;
