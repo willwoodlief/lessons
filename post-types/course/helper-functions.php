@@ -217,7 +217,7 @@ if ( ! function_exists( 'eltdf_lms_single_course_tabs' ) ) {
 				'template' => 'members'
 			);
 		}
-		$show_forum = true;
+		//$show_forum = true;  //for debugging on wp without bb forums
 		// Forum tab - shows forum
 		if ( $show_forum ) {
 			$b_owns = ecomhub_fi_safe_does_own_any_courses(get_current_user_id());
