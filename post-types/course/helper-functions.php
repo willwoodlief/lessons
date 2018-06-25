@@ -4,10 +4,10 @@
 if ( ! function_exists( 'eltdf_lms_course_meta_box_functions' ) ) {
 	function eltdf_lms_course_meta_box_functions( $post_types ) {
 		$post_types[] = 'course';
-		
+
 		return $post_types;
 	}
-	
+
 	add_filter( 'esmarts_elated_filter_meta_box_post_types_save', 'eltdf_lms_course_meta_box_functions' );
 	add_filter( 'esmarts_elated_filter_meta_box_post_types_remove', 'eltdf_lms_course_meta_box_functions' );
 }
@@ -16,10 +16,10 @@ if ( ! function_exists( 'eltdf_lms_course_meta_box_functions' ) ) {
 if ( ! function_exists( 'eltdf_lms_course_scope_meta_box_functions' ) ) {
 	function eltdf_lms_course_scope_meta_box_functions( $post_types ) {
 		$post_types[] = 'course';
-		
+
 		return $post_types;
 	}
-	
+
 	add_filter( 'esmarts_elated_filter_set_scope_for_meta_boxes', 'eltdf_lms_course_scope_meta_box_functions' );
 }
 
@@ -29,47 +29,47 @@ if ( ! function_exists( 'eltdf_lms_register_course_cpt' ) ) {
 		$cpt_class = array(
 			'ElatedfLMS\CPT\Course\CourseRegister'
 		);
-		
+
 		$cpt_class_name = array_merge( $cpt_class_name, $cpt_class );
-		
+
 		return $cpt_class_name;
 	}
-	
+
 	add_filter( 'eltdf_lms_filter_register_custom_post_types', 'eltdf_lms_register_course_cpt' );
 }
 
 if ( ! function_exists( 'eltdf_lms_get_archive_course_list' ) ) {
 	function eltdf_lms_get_archive_course_list( $eltdf_taxonomy_slug = '', $eltdf_taxonomy_name = '' ) {
-		
+
 		$number_of_items        = 12;
 		$number_of_items_option = esmarts_elated_options()->getOptionValue( 'course_archive_number_of_items' );
 		if ( ! empty( $number_of_items_option ) ) {
 			$number_of_items = $number_of_items_option;
 		}
-		
+
 		$number_of_columns        = 4;
 		$number_of_columns_option = esmarts_elated_options()->getOptionValue( 'course_archive_number_of_columns' );
 		if ( ! empty( $number_of_columns_option ) ) {
 			$number_of_columns = $number_of_columns_option;
 		}
-		
+
 		$space_between_items        = 'normal';
 		$space_between_items_option = esmarts_elated_options()->getOptionValue( 'course_archive_space_between_items' );
 		if ( ! empty( $space_between_items_option ) ) {
 			$space_between_items = $space_between_items_option;
 		}
-		
+
 		$image_size        = 'landscape';
 		$image_size_option = esmarts_elated_options()->getOptionValue( 'course_archive_image_size' );
 		if ( ! empty( $image_size_option ) ) {
 			$image_size = $image_size_option;
 		}
-		
+
 		$item_layout = 'standard';
-		
+
 		$category = $eltdf_taxonomy_name === 'course-category' && ! empty( $eltdf_taxonomy_slug ) ? $eltdf_taxonomy_slug : '';
 		$tag      = $eltdf_taxonomy_name === 'course-tag' && ! empty( $eltdf_taxonomy_slug ) ? $eltdf_taxonomy_slug : '';
-		
+
 		$params = array(
 			'number_of_items'     => $number_of_items,
 			'number_of_columns'   => $number_of_columns,
@@ -80,9 +80,9 @@ if ( ! function_exists( 'eltdf_lms_get_archive_course_list' ) ) {
 			'item_layout'         => $item_layout,
 			'pagination_type'     => 'load-more'
 		);
-		
+
 		$html = esmarts_elated_execute_shortcode( 'eltdf_course_list', $params );
-		
+
 		print $html;
 	}
 }
@@ -92,19 +92,19 @@ function eltdf_lms_add_meta_box_course_items_field( $attributes ) {
 	$name        = '';
 	$label       = '';
 	$description = '';
-	
+
 	extract( $attributes );
-	
+
 	if ( ! empty( $parent ) && ! empty( $name ) ) {
 		$field = new ElatedfLMSCourseSectionsMetaBox( $name, $label, $description );
-		
+
 		if ( is_object( $parent ) ) {
 			$parent->addChild( $name, $field );
-			
+
 			return $field;
 		}
 	}
-	
+
 	return false;
 }
 
@@ -116,15 +116,15 @@ if ( ! function_exists( 'eltdf_lms_single_course_title_display' ) ) {
 		if ( is_singular( 'course' ) ) {
 			//Override displaying title based on portfolio option
 			$show_title_area_meta = esmarts_elated_get_meta_field_intersect( 'show_title_area_course_single' );
-			
+
 			if ( ! empty( $show_title_area_meta ) ) {
 				$show_title_area = $show_title_area_meta == 'yes' ? true : false;
 			}
 		}
-		
+
 		return $show_title_area;
 	}
-	
+
 	add_filter( 'esmarts_elated_filter_show_title_area', 'eltdf_lms_single_course_title_display' );
 }
 
@@ -133,22 +133,22 @@ if ( ! function_exists( 'eltdf_lms_set_single_course_comments_enabled' ) ) {
 		if ( is_singular( 'course' ) && esmarts_elated_options()->getOptionValue( 'course_single_comments' ) == 'yes' ) {
 			$comments = true;
 		}
-		
+
 		return $comments;
 	}
-	
+
 	add_filter( 'esmarts_elated_filter_post_type_comments', 'eltdf_lms_set_single_course_comments_enabled', 10, 1 );
 }
 
 if ( ! function_exists( 'eltdf_lms_get_single_course' ) ) {
 	function eltdf_lms_get_single_course() {
 		$instructor = get_post_meta( get_the_ID(), 'eltdf_course_instructor_meta', true );
-		
+
 		$params = array(
 			'sidebar_layout' => esmarts_elated_sidebar_layout(),
 			'instructor'     => $instructor
 		);
-		
+
 		eltdf_lms_get_cpt_single_module_template_part( 'templates/single/holder', 'course', '', $params );
 	}
 }
@@ -163,22 +163,21 @@ if ( ! function_exists( 'eltdf_lms_single_course_tabs' ) ) {
 	 */
 	function eltdf_lms_single_course_tabs( $tabs = array() ) {
 		global $post;
-		
+
 		$course_sections = get_post_meta( get_the_ID(), 'eltdf_course_curriculum', true );
 		$member_list     = get_post_meta( get_the_ID(), 'eltdf_course_members_meta', true );
 		$forum_id        = get_post_meta( get_the_ID(), 'eltdf_course_forum_meta', true );
-		
+
 		$show_content    = $post->post_content ? true : false;
 		$show_curriculum = ! empty( $course_sections );
 		$show_reviews    = eltdf_lms_show_reviews();
 		$show_members    = $member_list !== 'yes' ? false : true;
 		$show_forum      = ! empty( $forum_id );
-		
 		if ( ! empty( $forum_id ) ) {
 			$forum_link = get_permalink( $forum_id );
 		}
-		$forum_link = get_home_url(null,'forum','https'); //added by will to set the forum url
-		
+		$forum_link = get_home_url( null, 'forum', 'https' ); //added by will to set the forum url
+
 		// Description tab - shows course content
 		if ( $show_content ) {
 			$tabs['description'] = array(
@@ -188,7 +187,7 @@ if ( ! function_exists( 'eltdf_lms_single_course_tabs' ) ) {
 				'template' => 'content'
 			);
 		}
-		
+
 		// Curriculum tab - shows course curriculum
 		if ( $show_curriculum ) {
 			$tabs['curriculum'] = array(
@@ -198,7 +197,7 @@ if ( ! function_exists( 'eltdf_lms_single_course_tabs' ) ) {
 				'template' => 'curriculum'
 			);
 		}
-		
+
 		// Reviews tab - shows reviews
 		if ( $show_reviews ) {
 			$tabs['reviews'] = array(
@@ -208,7 +207,7 @@ if ( ! function_exists( 'eltdf_lms_single_course_tabs' ) ) {
 				'template' => 'reviews-list'
 			);
 		}
-		
+
 		// Member tab - shows members
 		if ( $show_members ) {
 			$tabs['members'] = array(
@@ -229,10 +228,10 @@ if ( ! function_exists( 'eltdf_lms_single_course_tabs' ) ) {
 				'link'     => $forum_link
 			);
 		}
-		
+
 		return $tabs;
 	}
-	
+
 	add_filter( 'esmarts_elated_filter_single_course_tabs', 'eltdf_lms_single_course_tabs' );
 }
 
@@ -241,7 +240,7 @@ if ( ! function_exists( 'eltdf_lms_get_course_curriculum_list' ) ) {
 		$video_lessons   = $audio_lessons = $reading_lessons = 0;
 		$lessons_summary = array();
 		$elements        = array();
-		
+
 		foreach ( $section_elements as $section_element ) {
 			$element          = array();
 			$element['title'] = get_the_title( $section_element['value'] );
@@ -295,12 +294,12 @@ if ( ! function_exists( 'eltdf_lms_get_course_curriculum_list' ) ) {
 		if ( $reading_lessons !== 0 ) {
 			$lessons_summary[] = $reading_lessons . ' ' . ( $reading_lessons == 1 ? esc_html__( 'reading', 'eltdf-lms' ) : esc_html__( 'readings', 'eltdf-lms' ) );
 		}
-		
+
 		$params = array(
 			'lessons_summary' => $lessons_summary,
 			'elements'        => $elements
 		);
-		
+
 		return $params;
 	}
 }
@@ -318,12 +317,9 @@ if ( ! function_exists( 'eltdf_lms_include_course_payment_class' ) ) {
 			require_once 'payment/class-wc-course-data-store-cpt.php';
 		}
 	}
-	
+
 	add_action( 'init', 'eltdf_lms_include_course_payment_class', 1000 );
 }
-
-
-
 
 
 if ( ! function_exists( 'eltdf_lms_add_course_to_post_types_payment' ) ) {
@@ -334,49 +330,49 @@ if ( ! function_exists( 'eltdf_lms_add_course_to_post_types_payment' ) ) {
 		if ( eltdf_lms_eltdf_woocommerce_integration_installed() ) {
 			$post_types[] = 'course';
 		}
-		
+
 		return $post_types;
 	}
-	
+
 	add_filter( 'eltdf_woocommerce_checkout_integration_post_types', 'eltdf_lms_add_course_to_post_types_payment', 100 );
 }
 
 if ( ! function_exists( 'eltdf_lms_course_add_to_cart_action' ) ) {
 	function eltdf_lms_course_add_to_cart_action( $add_to_cart_url ) {
 
-		if (! isset($_REQUEST['add-to-cart'] )) {
+		if ( ! isset( $_REQUEST['add-to-cart'] ) ) {
 			return true;
 		}
 
-		$product_id        = apply_filters( 'woocommerce_add_to_cart_product_id', absint( $_REQUEST['add-to-cart'] ) );
-		if (!$product_id) {
+		$product_id = apply_filters( 'woocommerce_add_to_cart_product_id', absint( $_REQUEST['add-to-cart'] ) );
+		if ( ! $product_id ) {
 			return true;
 		}
 
-		$url_for_checkout = get_site_url(null,'checkout');
+		$url_for_checkout = get_site_url( null, 'checkout' );
 		// if already added to cart, go to checkout
-		foreach(WC()->cart->get_cart() as $key => $val ) {
+		foreach ( WC()->cart->get_cart() as $key => $val ) {
 			$_product = $val['data'];
 
-			if($product_id == $_product->get_id() ) {
-				wp_safe_redirect($url_for_checkout);
+			if ( $product_id == $_product->get_id() ) {
+				wp_safe_redirect( $url_for_checkout );
 				exit;
 			}
 		}
 
-		$product           = new WC_Product_Course( $product_id );
-		$url               = $product->add_to_cart_url();
-		$quantity          = empty( $_REQUEST['quantity'] ) ? 1 : wc_stock_amount( $_REQUEST['quantity'] );
-		$passed_validation = true;
-		$go_to_checkout          = (isset( $_REQUEST['go_to_checkout']) && (intval($_REQUEST['go_to_checkout']) > 1) ) ? false : true;
+		$product              = new WC_Product_Course( $product_id );
+		$url                  = $product->add_to_cart_url();
+		$quantity             = empty( $_REQUEST['quantity'] ) ? 1 : wc_stock_amount( $_REQUEST['quantity'] );
+		$passed_validation    = true;
+		$go_to_checkout       = ( isset( $_REQUEST['go_to_checkout'] ) && ( intval( $_REQUEST['go_to_checkout'] ) > 1 ) ) ? false : true;
 		$add_to_cart_response = WC()->cart->add_to_cart( $product_id, $quantity );
-		if ( $passed_validation &&  $add_to_cart_response !== false ) {
+		if ( $passed_validation && $add_to_cart_response !== false ) {
 			wc_add_to_cart_message( array( $product_id => $quantity ), true );
 			// If has custom URL redirect there
-			if ($go_to_checkout) {
-				wp_safe_redirect($url_for_checkout);
+			if ( $go_to_checkout ) {
+				wp_safe_redirect( $url_for_checkout );
 				exit;
-			} elseif( $url ) {
+			} elseif ( $url ) {
 				wp_safe_redirect( $url );
 				exit;
 			} elseif ( get_option( 'woocommerce_cart_redirect_after_add' ) === 'yes' ) {
@@ -387,38 +383,36 @@ if ( ! function_exists( 'eltdf_lms_course_add_to_cart_action' ) ) {
 
 		}
 	}
-	
+
 	add_action( 'woocommerce_add_to_cart_handler_course', 'eltdf_lms_course_add_to_cart_action', 10, 1 );
 }
 
 
-
-
 if ( ! function_exists( 'eltdf_lms_course_add_users_to_course' ) ) {
 	function eltdf_lms_course_add_users_to_course( $id ) {
-		$order      = new WC_Order( $id );
-		$items      = $order->get_items();
-		$user_id =      $order->get_user_id();
+		$order   = new WC_Order( $id );
+		$items   = $order->get_items();
+		$user_id = $order->get_user_id();
 
 
 		foreach ( $items as $item ) {
 			$data       = $item->get_data();
 			$product_id = $data['product_id'];
-			
+
 			// if ( $item['product_id'] == 0 && get_post_type( $product_id ) == 'course' ) { //todo change will to allow woo rest purchases
-			if (  get_post_type( $product_id ) == 'course' ) {
+			if ( get_post_type( $product_id ) == 'course' ) {
 				$users = get_post_meta( $product_id, 'eltdf_course_users_attended', true );
-				if (is_array($users)) {
+				if ( is_array( $users ) ) {
 					$users[] = $user_id;
 				} else {
 					$users = array( $user_id );
 				}
 
-				
+
 				update_post_meta( $product_id, 'eltdf_course_users_attended', $users );
-				
-				$user_status_values = eltdf_lms_get_user_courses_status($user_id);
-				
+
+				$user_status_values = eltdf_lms_get_user_courses_status( $user_id );
+
 				if ( ! empty( $user_status_values ) ) {
 					if ( ! array_key_exists( $product_id, $user_status_values ) ) {
 						$user_status_values[ $product_id ] = array(
@@ -426,8 +420,8 @@ if ( ! function_exists( 'eltdf_lms_course_add_users_to_course' ) ) {
 							'items_completed' => array(),
 							'retakes'         => 0
 						);
-						
-						eltdf_lms_set_user_courses_status( $user_status_values,$user_id );
+
+						eltdf_lms_set_user_courses_status( $user_status_values, $user_id );
 					}
 				} else {
 					$user_status_new_values = array(
@@ -437,21 +431,21 @@ if ( ! function_exists( 'eltdf_lms_course_add_users_to_course' ) ) {
 							'retakes'         => 0
 						)
 					);
-					
-					eltdf_lms_set_user_courses_status( $user_status_new_values,$user_id );
+
+					eltdf_lms_set_user_courses_status( $user_status_new_values, $user_id );
 				}
 
 				// add user start time here
 				$start_times = get_user_meta( $user_id, 'ecomhub_fi_user_start_course', true );
-				if (!$start_times) {
+				if ( ! $start_times ) {
 					$start_times = [];
 				}
-				$start_times[$product_id] = time();
+				$start_times[ $product_id ] = time();
 				update_user_meta( $user_id, 'ecomhub_fi_user_start_course', $start_times );
 			}
 		}
 	}
-	
+
 	add_action( 'woocommerce_order_status_completed', 'eltdf_lms_course_add_users_to_course', 10, 1 );
 
 }
@@ -462,7 +456,7 @@ if ( ! function_exists( 'eltdf_lms_calculate_course_price' ) ) {
 		$free_course    = get_post_meta( $id, 'eltdf_course_free_meta', true );
 		$price          = get_post_meta( $id, 'eltdf_course_price_meta', true );
 		$discount_price = get_post_meta( $id, 'eltdf_course_price_discount_meta', true );
-		
+
 		if ( $free_course != 'yes' ) {
 			if ( $discount_price != '' ) {
 				$final_price = $discount_price;
@@ -470,7 +464,7 @@ if ( ! function_exists( 'eltdf_lms_calculate_course_price' ) ) {
 				$final_price = $price;
 			}
 		}
-		
+
 		return $final_price;
 	}
 }
@@ -479,17 +473,17 @@ if ( ! function_exists( 'eltdf_lms_calculate_course_price' ) ) {
 if ( ! function_exists( 'eltdf_lms_add_course_to_rating' ) ) {
 	function eltdf_lms_add_course_to_rating( $post_types ) {
 		$post_types[] = 'course';
-		
+
 		return $post_types;
 	}
-	
+
 	add_filter( 'eltdf_lms_rating_post_types', 'eltdf_lms_add_course_to_rating' );
 }
 
 //Course rating functions
 if ( ! function_exists( 'eltdf_lms_show_reviews' ) ) {
 	function eltdf_lms_show_reviews() {
-		
+
 		if ( esmarts_elated_show_comments() ) {
 			return true;
 		}
@@ -498,27 +492,27 @@ if ( ! function_exists( 'eltdf_lms_show_reviews' ) ) {
 
 if ( ! function_exists( 'eltdf_lms_show_reviews_form' ) ) {
 	function eltdf_lms_show_reviews_form( $show_form ) {
-		
+
 		if ( is_singular( 'course' ) && ! eltdf_lms_user_has_course() ) {
 			$show_form = false;
 		}
-		
+
 		return $show_form;
 	}
-	
+
 	add_filter( 'esmarts_elated_filter_show_comment_form_filter', 'eltdf_lms_show_reviews_form' );
 }
 
 if ( ! function_exists( 'eltdf_lms_get_buy_form' ) ) {
 	function eltdf_lms_get_buy_form() {
-		
+
 		if ( eltdf_lms_is_woocommerce_installed() ) {
 			$user_has_course = eltdf_lms_user_has_course();
 			$params          = array();
-			
+
 			$user_current_course_status = eltdf_lms_user_current_course_status();
 			$user_completed_prerequired = eltdf_lms_user_completed_prerequired_course();
-			
+
 			if ( $user_current_course_status == 'completed' ) {
 				$params['percent'] = 100;
 			} else if ( $user_current_course_status == 'in-progress' ) {
@@ -532,14 +526,14 @@ if ( ! function_exists( 'eltdf_lms_get_buy_form' ) ) {
 					eltdf_lms_get_cpt_single_module_template_part( 'templates/single/parts/prerequired-info', 'course', '', $params );
 				} else {
 					if ( $user_current_course_status == 'completed' && ( eltdf_lms_check_retakes_option() > eltdf_lms_user_current_course_retakes() ) ) {
-		//				eltdf_lms_get_cpt_single_module_template_part( 'templates/single/parts/retake-form', 'course', '', $params );
+						//				eltdf_lms_get_cpt_single_module_template_part( 'templates/single/parts/retake-form', 'course', '', $params );
 					}
 					eltdf_lms_get_cpt_single_module_template_part( 'templates/single/parts/progress-bar', 'course', '', $params );
 				}
 			} elseif ( eltdf_lms_check_is_course_in_cart() ) {
-		//		eltdf_lms_get_cpt_single_module_template_part( 'templates/single/parts/cart-button', 'course', '', $params );
+				//		eltdf_lms_get_cpt_single_module_template_part( 'templates/single/parts/cart-button', 'course', '', $params );
 			} elseif ( eltdf_lms_eltdf_woocommerce_integration_installed() ) {
-		//		eltdf_woocomerce_checkout_integration_get_buy_form( array(), array( 'input_text' => esc_html__( 'Buy Course', 'eltdf-lms' ) ) );
+				//		eltdf_woocomerce_checkout_integration_get_buy_form( array(), array( 'input_text' => esc_html__( 'Buy Course', 'eltdf-lms' ) ) );
 			}
 			//this should move from this function when sidebar created
 		}
@@ -557,7 +551,7 @@ if ( ! function_exists( 'eltdf_lms_get_wishlist_button' ) ) {
 					$text = esc_html__( 'Remove from Wishlist', 'eltdf-lms' );
 					$icon = 'lnr-heart';
 				}
-				
+
 				$wishlist_params = array(
 					'wishlist_text' => $text,
 					'wishlist_icon' => $icon
@@ -571,12 +565,12 @@ if ( ! function_exists( 'eltdf_lms_get_wishlist_button' ) ) {
 if ( ! function_exists( 'eltdf_lms_get_items_load' ) ) {
 	function eltdf_lms_get_items_load() {
 		$params = array();
-		
+
 		if ( is_singular( 'course' ) ) {
 			eltdf_lms_get_cpt_single_module_template_part( 'templates/single/popup-holder', 'course', '', $params );
 		}
 	}
-	
+
 	add_action( 'esmarts_elated_action_before_page_header', 'eltdf_lms_get_items_load' );
 }
 
@@ -584,85 +578,86 @@ if ( ! function_exists( 'eltdf_lms_load_element_item' ) ) {
 	//todo pages are loaded here
 	// todo add in blocking from ajax
 	function eltdf_lms_load_element_item() {
-		
+
 		if ( isset( $_POST ) && isset( $_POST['item_id'] ) ) {
 			$id        = $_POST['item_id'];
 			$course_id = $_POST['course_id'];
 			$json_data = array();
-			
+
 			$params = array(
 				'item_id'   => $id,
 				'course_id' => $course_id
 			);
-			
+
 			$post_type = get_post_type( $id );
 			if ( $post_type == 'lesson' ) {
 				$params['lesson_type'] = get_post_meta( $id, 'eltdf_lesson_type_meta', true );
 			}
-			
+
 			$html = eltdf_lms_cpt_single_module_template_part( 'templates/single/holder', $post_type, '', $params );
 			if ( eltdf_lms_user_has_course( $course_id ) && eltdf_lms_user_completed_prerequired_course( $course_id ) ) {
 				$html .= eltdf_lms_popup_navigation( $params );
 			}
-			
+
 			$json_data['html'] = $html;
-			
+
 			eltdf_lms_ajax_status( 'success', '', $json_data );
 		}
-		
+
 		wp_die();
 	}
-	
+
 	add_action( 'wp_ajax_nopriv_eltdf_lms_load_element_item', 'eltdf_lms_load_element_item' );
 	add_action( 'wp_ajax_eltdf_lms_load_element_item', 'eltdf_lms_load_element_item' );
 }
 
 if ( ! function_exists( 'eltdf_lms_popup_navigation' ) ) {
 	function eltdf_lms_popup_navigation( $params = array() ) {
-		
+
 		$html = eltdf_lms_cpt_single_module_template_part( 'templates/single/parts/popup-navigation', 'course', '', $params );
-		
+
 		return $html;
 	}
 }
 
 
 if ( ! function_exists( 'ecomfub_fi_count_section_progress' ) ) {
-	function ecomfub_fi_count_section_progress($summary_elements) {
+	function ecomfub_fi_count_section_progress( $summary_elements ) {
 
-		$result = ecomfub_fi_get_completed_array($summary_elements);
-		$ret = sizeof($result);
+		$result = ecomfub_fi_get_completed_array( $summary_elements );
+		$ret    = sizeof( $result );
 
 		return $ret;
 	}
 }
 
 if ( ! function_exists( 'ecomfub_fi_get_completed_hash' ) ) {
-	function ecomfub_fi_get_completed_array($summary_elements) {
+	function ecomfub_fi_get_completed_array( $summary_elements ) {
 		//build array of course indexes
 
 		$total_courses = [];
-		foreach ($summary_elements as $e) {
-			$index = $e['id'];
+		foreach ( $summary_elements as $e ) {
+			$index           = $e['id'];
 			$total_courses[] = $index;
 		}
 		$course_id = get_the_ID();
 		//get completed courses
-		$user_status_values = eltdf_lms_get_user_courses_status(null,$course_id);
+		$user_status_values = eltdf_lms_get_user_courses_status( null, $course_id );
 
-		if (array_key_exists($course_id,$user_status_values)) {
+		if ( array_key_exists( $course_id, $user_status_values ) ) {
 			$items_completed = $user_status_values[ $course_id ]['items_completed'];
 		} else {
 			$items_completed = [];
 		}
-		return array_intersect($items_completed, $total_courses);;
+
+		return array_intersect( $items_completed, $total_courses );;
 	}
 }
 
 
 if ( ! function_exists( 'eltdf_lms_complete_item' ) ) {
 	function eltdf_lms_complete_item() {
-		
+
 		if ( empty( $_POST ) || ! isset( $_POST ) ) {
 			eltdf_lms_ajax_status( 'error', esc_html__( 'All fields are empty', 'eltdf-lms' ) );
 		} else {
@@ -671,59 +666,59 @@ if ( ! function_exists( 'eltdf_lms_complete_item' ) ) {
 			parse_str( $data_string, $data_array );
 			$course_id          = $data_array['eltdf_lms_course_id'];
 			$item_id            = $data_array['eltdf_lms_item_id'];
-			$user_status_values = eltdf_lms_get_user_courses_status(null,$course_id);
-			
+			$user_status_values = eltdf_lms_get_user_courses_status( null, $course_id );
+
 			$items = eltdf_lms_get_items_in_course( $course_id );
-			
+
 			if ( ! empty( $user_status_values ) && array_key_exists( $course_id, $user_status_values ) ) {
-				
+
 				$items_completed = array_unique( array_merge( $user_status_values[ $course_id ]['items_completed'], array( $item_id ) ) );
 				if ( eltdf_lms_array_equal( $items, $items_completed ) ) {
 					$status = 'completed';
 				} else {
 					$status = 'in-progress';
 				}
-				
+
 				$user_status_new_values = array(
 					'status'          => $status,
 					'items_completed' => array_unique( array_merge( $user_status_values[ $course_id ]['items_completed'], array( $item_id ) ) ),
 					'retakes'         => $user_status_values[ $course_id ]['retakes']
 				);
-				
+
 				$user_status_values[ $course_id ] = $user_status_new_values;
 				eltdf_lms_set_user_courses_status( $user_status_values );
-				
+
 				$message_html = '<p class="eltd-lms-message">';
 				$message_html .= '<span class="lnr lnr-checkmark-circle"></span>';
 				$message_html .= '<span class="eltd-lms-message-text">';
-				
+
 				$message = get_post_meta( $item_id, 'eltd_lesson_post_message_meta', true );
-				
+
 				if ( $message == '' ) {
 					$message_html .= esc_html__( 'Completed', 'eltd-lms' );
 				} else {
 					$message_html .= $message;
 				}
-				
+
 				$message_html .= '</span>';
-				
+
 				$data = array(
 					'content_message' => $message_html
 				);
 				eltdf_lms_ajax_status( 'success', esc_html__( 'Item finished successfully', 'eltdf-lms' ), $data );
 			}
 		}
-		
+
 		wp_die();
 	}
-	
+
 	add_action( 'wp_ajax_eltdf_lms_complete_item', 'eltdf_lms_complete_item' );
 }
 
 if ( ! function_exists( 'eltdf_lms_check_retakes_option' ) ) {
 	function eltdf_lms_check_retakes_option() {
 		$number_of_retakes = get_post_meta( get_the_ID(), 'eltdf_course_retake_number_meta', true );
-		
+
 		return $number_of_retakes;
 	}
 }
@@ -732,7 +727,7 @@ if ( ! function_exists( 'eltdf_lms_get_items_in_course' ) ) {
 	function eltdf_lms_get_items_in_course( $id = '' ) {
 		$course_id       = ( $id != '' ? $id : get_the_ID() );
 		$course_sections = get_post_meta( $course_id, 'eltdf_course_curriculum', true );
-		
+
 		$items = array();
 		if ( isset( $course_sections ) && $course_sections != '' ) {
 			for ( $i = 0; $i < count( $course_sections ); $i ++ ) {
@@ -748,7 +743,7 @@ if ( ! function_exists( 'eltdf_lms_get_items_in_course' ) ) {
 				}
 			}
 		}
-		
+
 		return $items;
 	}
 }
@@ -757,13 +752,13 @@ if ( ! function_exists( 'eltdf_lms_get_number_of_items_in_course' ) ) {
 	function eltdf_lms_get_number_of_items_in_course( $id = '' ) {
 		$course_id = ( $id != '' ? $id : get_the_ID() );
 		$items     = eltdf_lms_get_items_in_course( $course_id );
-		
+
 		if ( is_array( $items ) && count( $items ) > 0 ) {
 			$number_ot_items = count( $items );
 		} else {
 			$number_ot_items = 0;
 		}
-		
+
 		return $number_ot_items;
 	}
 }
@@ -773,18 +768,18 @@ if ( ! function_exists( 'eltdf_lms_get_course_item_completed_class' ) ) {
 		$class           = '';
 		$course_id       = ( $id != '' ? $id : get_the_ID() );
 		$completed_items = eltdf_lms_user_current_course_items_completed();
-		
+
 		if ( in_array( $course_id, $completed_items ) ) {
 			$class = 'eltdf-item-completed';
 		}
-		
+
 		return $class;
 	}
 }
 
 if ( ! function_exists( 'eltdf_lms_set_user_courses_status' ) ) {
-	function eltdf_lms_set_user_courses_status( $user_status_values,$user_id= null ) {
-		if (!$user_id) {
+	function eltdf_lms_set_user_courses_status( $user_status_values, $user_id = null ) {
+		if ( ! $user_id ) {
 			$user_id = get_current_user_id();
 		}
 		update_user_meta( $user_id, 'eltdf_user_course_status', $user_status_values );
@@ -792,14 +787,14 @@ if ( ! function_exists( 'eltdf_lms_set_user_courses_status' ) ) {
 }
 
 if ( ! function_exists( 'eltdf_lms_get_user_courses_status' ) ) {
-	function eltdf_lms_get_user_courses_status($user_id = null,$product_id_if_mising = null) {
-		if (!$user_id) {
+	function eltdf_lms_get_user_courses_status( $user_id = null, $product_id_if_mising = null ) {
+		if ( ! $user_id ) {
 			$user_id = get_current_user_id();
 		}
 		$user_status_values = get_user_meta( $user_id, 'eltdf_user_course_status', true );
 
-		if (!$user_status_values) {
-			if ($product_id_if_mising) {
+		if ( ! $user_status_values ) {
+			if ( $product_id_if_mising ) {
 				$user_status_values = array(
 					$product_id_if_mising => array(
 						'status'          => 'enrolled',
@@ -809,29 +804,29 @@ if ( ! function_exists( 'eltdf_lms_get_user_courses_status' ) ) {
 				);
 
 			}
-		} elseif (! isset($user_status_values[$product_id_if_mising])) {
-			if ($product_id_if_mising) {
-				$user_status_values[$product_id_if_mising] = array(
-						'status'          => 'enrolled',
-						'items_completed' => array(),
-						'retakes'         => 0
+		} elseif ( ! isset( $user_status_values[ $product_id_if_mising ] ) ) {
+			if ( $product_id_if_mising ) {
+				$user_status_values[ $product_id_if_mising ] = array(
+					'status'          => 'enrolled',
+					'items_completed' => array(),
+					'retakes'         => 0
 				);
 
 			}
 		}
-		
+
 		return $user_status_values;
 	}
 }
 if ( ! function_exists( 'eltdf_lms_user_current_course_info' ) ) {
 	function eltdf_lms_user_current_course_info( $id = '' ) {
 		$course_id          = ( $id != '' ? $id : get_the_ID() );
-		$user_status_values = eltdf_lms_get_user_courses_status(null,$course_id);
-		
+		$user_status_values = eltdf_lms_get_user_courses_status( null, $course_id );
+
 		if ( is_array( $user_status_values ) && count( $user_status_values ) > 0 && array_key_exists( $course_id, $user_status_values ) ) {
 			return $user_status_values[ $course_id ];
 		}
-		
+
 		return false;
 	}
 }
@@ -841,11 +836,11 @@ if ( ! function_exists( 'eltdf_lms_user_current_course_status' ) ) {
 		$user_course_status = '';
 		$course_id          = ( $id != '' ? $id : get_the_ID() );
 		$user_status_values = eltdf_lms_user_current_course_info( $course_id );
-		
+
 		if ( is_array( $user_status_values ) && count( $user_status_values ) > 0 ) {
 			$user_course_status = $user_status_values['status'];
 		}
-		
+
 		return $user_course_status;
 	}
 }
@@ -855,11 +850,11 @@ if ( ! function_exists( 'eltdf_lms_user_current_course_items_completed' ) ) {
 		$user_course_items_completed = array();
 		$course_id                   = ( $id != '' ? $id : get_the_ID() );
 		$user_status_values          = eltdf_lms_user_current_course_info( $course_id );
-		
+
 		if ( is_array( $user_status_values ) && count( $user_status_values ) > 0 ) {
 			$user_course_items_completed = $user_status_values['items_completed'];
 		}
-		
+
 		return $user_course_items_completed;
 	}
 }
@@ -869,11 +864,11 @@ if ( ! function_exists( 'eltdf_lms_user_current_course_retakes' ) ) {
 		$user_course_retakes = 0;
 		$course_id           = ( $id != '' ? $id : get_the_ID() );
 		$user_status_values  = eltdf_lms_user_current_course_info( $course_id );
-		
+
 		if ( is_array( $user_status_values ) && count( $user_status_values ) > 0 ) {
 			$user_course_retakes = $user_status_values['retakes'];
 		}
-		
+
 		return $user_course_retakes;
 	}
 }
@@ -884,7 +879,7 @@ if ( ! function_exists( 'eltdf_lms_user_current_course_completed_percent' ) ) {
 		$items           = eltdf_lms_get_number_of_items_in_course( $course_id );
 		$completed_items = count( eltdf_lms_user_current_course_items_completed() );
 		$percent         = $items == 0 ? 0 : round( ( $completed_items / $items ) * 100 );
-		
+
 		return $percent;
 	}
 }
@@ -894,22 +889,22 @@ if ( ! function_exists( 'eltdf_lms_course_items_list_array' ) ) {
 		$course_id       = ( $id != '' ? $id : get_the_ID() );
 		$course_sections = get_post_meta( $course_id, 'eltdf_course_curriculum', true );
 		$elements_keys   = array();
-		
+
 		if ( ! empty( $course_sections ) ) {
 			foreach ( $course_sections as $course_section ) {
 				$section_elements = $course_section['section_elements'];
 				if ( ! empty( $section_elements ) ) {
-					
+
 					$list     = eltdf_lms_get_course_curriculum_list( $section_elements );
 					$elements = $list['elements'];
-					
+
 					foreach ( $elements as $element ) {
 						$elements_keys[] = $element['id'];
 					}
 				}
 			}
 		}
-		
+
 		return $elements_keys;
 	}
 }
@@ -923,7 +918,7 @@ if ( ! function_exists( 'ecomhub_fi_course_items_section_lookup' ) ) {
 	function ecomhub_fi_course_items_section_lookup( $id = '' ) {
 		$course_id       = ( $id != '' ? $id : get_the_ID() );
 		$course_sections = get_post_meta( $course_id, 'eltdf_course_curriculum', true );
-		$lookup = [];
+		$lookup          = [];
 
 		if ( ! empty( $course_sections ) ) {
 			$section_count = 0;
@@ -935,7 +930,7 @@ if ( ! function_exists( 'ecomhub_fi_course_items_section_lookup' ) ) {
 					$elements = $list['elements'];
 
 					foreach ( $elements as $element ) {
-						$lookup[$element['id']] = $section_count;
+						$lookup[ $element['id'] ] = $section_count;
 					}
 				}
 				$section_count ++;
@@ -951,20 +946,20 @@ if ( ! function_exists( 'eltdf_lms_course_is_preview_available' ) ) {
 		$free_lesson      = get_post_meta( $id, 'eltdf_lesson_free_meta', true );
 		$available        = false;
 		$user_have_course = eltdf_lms_user_has_course() && eltdf_lms_user_completed_prerequired_course();
-		
+
 		if ( $user_have_course ) {
 			$available = true;
 		} else if ( $free_lesson == 'yes' ) {
 			$available = true;
 		}
-		
+
 		return $available;
 	}
 }
 
 if ( ! function_exists( 'eltdf_lms_retake_course' ) ) {
 	function eltdf_lms_retake_course() {
-		
+
 		if ( empty( $_POST ) || ! isset( $_POST ) ) {
 			eltdf_lms_ajax_status( 'error', esc_html__( 'All fields are empty', 'eltdf-lms' ) );
 		} else {
@@ -972,51 +967,51 @@ if ( ! function_exists( 'eltdf_lms_retake_course' ) ) {
 			$data_string = $data['post'];
 			parse_str( $data_string, $data_array );
 			$course_id = $data_array['eltdf_lms_course_id'];
-			
-			$user_courses_status_values = eltdf_lms_get_user_courses_status(null,$course_id);
+
+			$user_courses_status_values = eltdf_lms_get_user_courses_status( null, $course_id );
 			$user_course_status_values  = eltdf_lms_user_current_course_info( $course_id );
-			
+
 			$user_status_new_values = array(
 				'status'          => 'enrolled',
 				'items_completed' => array(),
 				'retakes'         => $user_course_status_values['retakes'] + 1
 			);
-			
+
 			$user_courses_status_values[ $course_id ] = $user_status_new_values;
 			eltdf_lms_set_user_courses_status( $user_courses_status_values );
-			
+
 			//Updated results field
 			$params_results = eltdf_lms_get_quiz_results_meta_params();
 			eltdf_lms_set_user_quiz_values( $course_id, 0, $params_results, 'eltdf_user_quiz_results' );
-			
+
 			//Update temporary field
 			$params_results = eltdf_lms_get_quiz_temp_meta_params();
 			eltdf_lms_set_user_quiz_values( $course_id, 0, $params_results, 'eltdf_user_quiz_temp' );
-			
+
 			//Update status field
 			$params_results = eltdf_lms_get_quiz_status_meta_params();
 			eltdf_lms_set_user_quiz_values( $course_id, 0, $params_results, 'eltdf_user_quiz_status' );
-			
+
 			eltdf_lms_ajax_status( 'success', esc_html__( 'Course Retaken', 'eltdf-lms' ) );
 		}
-		
+
 		wp_die();
 	}
-	
+
 	add_action( 'wp_ajax_eltdf_lms_retake_course', 'eltdf_lms_retake_course' );
 }
 
 if ( ! function_exists( 'eltdf_lms_check_is_course_in_cart' ) ) {
 	function eltdf_lms_check_is_course_in_cart() {
-		
+
 		foreach ( WC()->cart->get_cart() as $cart_item_key => $values ) {
 			$_product = $values['data'];
-			
+
 			if ( get_the_ID() == $_product->get_id() ) {
 				return true;
 			}
 		}
-		
+
 		return false;
 	}
 }
@@ -1026,23 +1021,23 @@ if ( ! function_exists( 'eltdf_lms_remove_message_from_cart' ) ) {
 		if ( get_post_type( $product_id ) == 'course' ) {
 			return '';
 		}
-		
+
 		return $message;
 	}
-	
+
 	add_filter( 'wc_add_to_cart_message_html', 'eltdf_lms_remove_message_from_cart', 10, 2 );
 }
 
 if ( ! function_exists( 'eltdf_lms_add_course_to_wishlist' ) ) {
 	function eltdf_lms_add_course_to_wishlist() {
 		$user_id = get_current_user_id();
-		
+
 		if ( empty( $_POST ) || ! isset( $_POST ) ) {
 			eltdf_lms_ajax_status( 'error', esc_html__( 'All fields are empty', 'eltdf-lms' ) );
 		} else {
 			$course_id            = $_POST['course_id'];
 			$current_course_array = get_user_meta( $user_id, 'eltdf_course_wishlist', true );
-			
+
 			if ( ! empty( $current_course_array ) && in_array( $course_id, $current_course_array ) ) {
 				$temp_array[]         = $course_id;
 				$current_course_array = array_diff( $current_course_array, $temp_array );
@@ -1054,14 +1049,14 @@ if ( ! function_exists( 'eltdf_lms_add_course_to_wishlist' ) ) {
 				$data['message']        = esc_html__( 'Remove from Wishlist', 'eltdf-lms' );
 				$data['icon']           = 'lnr-cross';
 			}
-			
+
 			update_user_meta( $user_id, 'eltdf_course_wishlist', $current_course_array );
 			eltdf_lms_ajax_status( 'success', '', $data );
 		}
-		
+
 		wp_die();
 	}
-	
+
 	add_action( 'wp_ajax_eltdf_lms_add_course_to_wishlist', 'eltdf_lms_add_course_to_wishlist' );
 }
 
@@ -1069,92 +1064,92 @@ if ( ! function_exists( 'eltdf_lms_is_course_in_wishlist' ) ) {
 	function eltdf_lms_is_course_in_wishlist( $id = '' ) {
 		$course_id = ( $id != '' ? $id : get_the_ID() );
 		$courses   = get_user_meta( get_current_user_id(), 'eltdf_course_wishlist', true );
-		
+
 		if ( ! empty( $courses ) && in_array( $course_id, $courses ) ) {
 			return true;
 		}
-		
+
 		return false;
 	}
-	
+
 	add_action( 'esmarts_elated_action_before_page_header', 'eltdf_lms_get_items_load' );
 }
 
 if ( ! function_exists( 'eltdf_lms_add_course_to_search_types' ) ) {
 	function eltdf_lms_add_course_to_search_types( $post_types ) {
 		$post_types['course'] = 'Course';
-		
+
 		return $post_types;
 	}
-	
+
 	add_filter( 'esmarts_elated_filter_search_post_type_widget_params_post_type', 'eltdf_lms_add_course_to_search_types' );
 }
 
 if ( ! function_exists( 'eltdf_lms_course_override_search_template_path' ) ) {
 	function eltdf_lms_course_override_search_template_path( $template_path ) {
-		
+
 		if ( isset( $_GET['eltdf-course-search'] ) ) {
 			$template_path = ELATED_LMS_CPT_PATH . '/';
 		}
-		
+
 		return $template_path;
 	}
-	
+
 	add_filter( 'esmarts_elated_filter_edit_module_template_path', 'eltdf_lms_course_override_search_template_path', 10, 1 );
 }
 
 if ( ! function_exists( 'eltdf_lms_course_override_search_path' ) ) {
 	function eltdf_lms_course_override_search_path( $path ) {
-		
+
 		if ( isset( $_GET['eltdf-course-search'] ) ) {
 			$path = 'search';
 		}
-		
+
 		return $path;
 	}
-	
+
 	add_filter( 'esmarts_elated_filter_search_page_path', 'eltdf_lms_course_override_search_path', 10, 1 );
 }
 
 if ( ! function_exists( 'eltdf_lms_course_override_search_module' ) ) {
 	function eltdf_lms_course_override_search_module( $module ) {
-		
+
 		if ( isset( $_GET['eltdf-course-search'] ) ) {
 			$module = 'course';
 		}
-		
+
 		return $module;
 	}
-	
+
 	add_filter( 'esmarts_elated_filter_search_page_module', 'eltdf_lms_course_override_search_module', 10, 1 );
 }
 
 if ( ! function_exists( 'eltdf_lms_course_override_search_plugin' ) ) {
 	function eltdf_lms_course_override_search_plugin( $plugin ) {
-		
+
 		if ( isset( $_GET['eltdf-course-search'] ) ) {
 			$plugin = true;
 		}
-		
+
 		return $plugin;
 	}
-	
+
 	add_filter( 'esmarts_elated_filter_search_page_plugin_override', 'eltdf_lms_course_override_search_plugin', 10, 1 );
 }
 
 if ( ! function_exists( 'eltdf_lms_course_override_search_params' ) ) {
 	function eltdf_lms_course_override_search_params( $params ) {
-		
+
 		if ( isset( $_GET['eltdf-course-search'] ) ) {
 			$list_params   = array();
 			$search_params = array();
-			
+
 			$query_array = array(
 				'post_status'    => 'publish',
 				'post_type'      => 'course',
 				'posts_per_page' => '-1'
 			);
-			
+
 			$tax_query = array();
 			if ( isset( $_GET['eltdf-course-category'] ) && $_GET['eltdf-course-category'] != 'all' ) {
 				$tax_query[]                        = array(
@@ -1166,11 +1161,11 @@ if ( ! function_exists( 'eltdf_lms_course_override_search_params' ) ) {
 				);
 				$search_params['selected_category'] = $_GET['eltdf-course-category'];
 			}
-			
+
 			if ( ! empty( $tax_query ) ) {
 				$query_array['tax_query'] = $tax_query;
 			}
-			
+
 			$meta_query = array();
 			if ( isset( $_GET['eltdf-course-instructor'] ) && $_GET['eltdf-course-instructor'] != 'all' ) {
 				$meta_query[]                         = array(
@@ -1180,7 +1175,7 @@ if ( ! function_exists( 'eltdf_lms_course_override_search_params' ) ) {
 				);
 				$search_params['selected_instructor'] = $_GET['eltdf-course-instructor'];
 			}
-			
+
 			if ( isset( $_GET['eltdf-course-price'] ) && $_GET['eltdf-course-price'] != 'all' ) {
 				$free_meta_value                 = $_GET['eltdf-course-price'] == 'free' ? 'yes' : 'no';
 				$meta_query[]                    = array(
@@ -1190,89 +1185,135 @@ if ( ! function_exists( 'eltdf_lms_course_override_search_params' ) ) {
 				);
 				$search_params['selected_price'] = $_GET['eltdf-course-price'];
 			}
-			
+
 			if ( ! empty( $meta_query ) ) {
 				$query_array['meta_query'] = $meta_query;
 			}
-			
+
 			$new_query               = new WP_Query( $query_array );
 			$params['query']         = $new_query;
 			$params['max_num_pages'] = 1;
-			
+
 			$params['search_params'] = $search_params;
 			$params['list_params']   = $list_params;
 		}
-		
+
 		return $params;
 	}
-	
+
 	add_filter( 'esmarts_elated_filter_search_page_params', 'eltdf_lms_course_override_search_params', 10, 1 );
 }
 
 if ( ! function_exists( 'eltdf_lms_course_override_search_title' ) ) {
 	function eltdf_lms_course_override_search_title( $title ) {
-		
+
 		if ( isset( $_GET['eltdf-course-search'] ) ) {
 			$title = esc_html__( 'List of filtered courses', 'eltdf-lms' );
 		}
-		
+
 		return $title;
 	}
-	
+
 	add_filter( 'esmarts_elated_filter_title_text', 'eltdf_lms_course_override_search_title', 10, 1 );
 }
 
+if ( ! function_exists( 'ecomhub_fi_return_link_attributes' ) ) {
+	/**
+	 * returns part of the link tag for the url
+	 *
+	 * @param string $url
+	 *
+	 * @return string
+	 */
+	function ecomhub_fi_return_link_attributes( $url ) {
+		$ret = '';
+		$b_ok = preg_match( "/.*\/forum($|\/)/", $url, $output_array );
+		if ( $b_ok ) {
+			//see if owns
+			$b_owns = ecomhub_fi_safe_does_own_any_courses(get_current_user_id());
+			if (!$b_owns) {
+				$ret = " disabled style='pointer-events: none;color: #d0d0d0' onclick='function(e) {e.preventDefault(); return false;}' ";
+			}
+		}
+		return $ret;
+	}
+
+	add_filter( 'ecomhub_fi_get_link_attributes', 'ecomhub_fi_return_link_attributes' );
+}
+
+
+if ( ! function_exists( 'ecomhub_fi_safe_does_own_course' ) ) {
+	/**
+	 * returns part of the link tag for the url
+	 *
+	 * @param string $user_id
+	 *
+	 * @return boolean
+	 */
+	function ecomhub_fi_safe_does_own_any_courses( $user_id ) {
+
+		global $wpdb;
+		$post_table_name = $wpdb->prefix . 'posts';
+		$b_owns = false;
+		if ( $user_id ) {
+			//get all the courses
+			$post_res = $wpdb->get_results( /** @lang text */
+				"
+				select  p.ID as 'id'  from $post_table_name p
+				where post_type='course';"
+			);
+
+			$posts_ids = [];
+			if ( ! $wpdb->last_error ) {
+				if ( ! empty( $post_res ) ) {
+					foreach ( $post_res as $ps ) {
+						$posts_ids[] = $ps->id;
+					}
+				}
+
+			}
+			//silently block on db error or empty courses
+
+
+
+			//get the user meta data for the course starting
+			$start_times = get_user_meta( get_current_user_id(), 'ecomhub_fi_user_start_course', true );
+			if ( ! empty( $start_times ) && is_array( $start_times ) ) {
+				foreach ( $posts_ids as $pid ) {
+					if ( array_key_exists( $pid, $start_times ) ) {
+						$b_owns = true;
+						break;
+					}
+				}
+			}
+			//the user has to own at least one course
+		}
+
+		return $b_owns;
+	}
+
+
+}
+
+//
 
 if ( ! function_exists( 'ecomhub_fi_conditional_redirect_forums' ) ) {
 	/**
 	 * @return void
 	 */
-	function ecomhub_fi_conditional_redirect_forums(  ) {
-		global $wpdb;
-		$post_table_name = $wpdb->prefix . 'posts';
+	function ecomhub_fi_conditional_redirect_forums() {
+
 
 		$page_going_to = $_SERVER["REQUEST_URI"];
-		$b_ok = preg_match("/.*\/forum($|\/)/", $page_going_to, $output_array);
-		if ($b_ok) {
-			$b_owns = false;
-			if ( get_current_user_id()) {
-				//get all the courses
-				$post_res = $wpdb->get_results( /** @lang text */
-					"
-				select  p.ID as 'id'  from $post_table_name p
-				where post_type='course';"
-				);
+		$b_ok          = preg_match( "/.*\/forum($|\/)/", $page_going_to, $output_array );
+		if ( $b_ok ) {
 
-				$posts_ids = [];
-				if (!$wpdb->last_error) {
-					if (empty($post_res)) {return ;}
-					foreach ($post_res as $ps) {
-						$posts_ids[] = $ps->id;
-					}
-				} else {
-					//silently block on db error
-				}
-
-
-				//get the user meta data for the course starting
-				$start_times = get_user_meta( get_current_user_id(), 'ecomhub_fi_user_start_course', true );
-				if (!empty($start_times) && is_array($start_times)) {
-					foreach ($posts_ids as $pid) {
-						if (array_key_exists($pid,$start_times)) {
-							$b_owns = true;
-							break;
-						}
-				}
-				}
-				//the user has to own at least one course
-
-
-			}
+			$b_owns = ecomhub_fi_safe_does_own_any_courses(get_current_user_id());
 
 			//check if user has course, if not then redirect
-			if (!$b_owns) {
+			if ( ! $b_owns ) {
 				$url = get_home_url();
-				wp_redirect($url);
+				wp_redirect( $url );
 				exit();
 			}
 		}
@@ -1284,7 +1325,7 @@ if ( ! function_exists( 'ecomhub_fi_conditional_redirect_forums' ) ) {
 if ( ! function_exists( 'eltdf_lms_search_courses' ) ) {
 	function eltdf_lms_search_courses() {
 		$user_id = get_current_user_id();
-		
+
 		if ( empty( $_POST ) || ! isset( $_POST ) ) {
 			eltdf_lms_ajax_status( 'error', esc_html__( 'All fields are empty', 'eltdf-lms' ) );
 		} else {
@@ -1296,10 +1337,10 @@ if ( ! function_exists( 'eltdf_lms_search_courses' ) ) {
 				's'              => $_POST['term'],
 				'posts_per_page' => 5
 			);
-			
+
 			$html  = '';
 			$query = new WP_Query( $args );
-			
+
 			if ( $query->have_posts() ) {
 				$html .= '<ul>';
 				while ( $query->have_posts() ) {
@@ -1311,10 +1352,10 @@ if ( ! function_exists( 'eltdf_lms_search_courses' ) ) {
 				eltdf_lms_ajax_status( 'success', '', $json_data );
 			}
 		}
-		
+
 		wp_die();
 	}
-	
+
 	add_action( 'wp_ajax_nopriv_eltdf_lms_search_courses', 'eltdf_lms_search_courses' );
 	add_action( 'wp_ajax_eltdf_lms_search_courses', 'eltdf_lms_search_courses' );
 }
@@ -1325,28 +1366,28 @@ if ( ! function_exists( 'eltdf_lms_search_courses' ) ) {
 if ( ! function_exists( 'eltdf_lms_course_ajax_load_more' ) ) {
 	function eltdf_lms_course_ajax_load_more() {
 		$shortcode_params = array();
-		
+
 		if ( ! empty( $_POST ) ) {
 			foreach ( $_POST as $key => $value ) {
 				if ( $key !== '' ) {
 					$addUnderscoreBeforeCapitalLetter = preg_replace( '/([A-Z])/', '_$1', $key );
 					$setAllLettersToLowercase         = strtolower( $addUnderscoreBeforeCapitalLetter );
-					
+
 					$shortcode_params[ $setAllLettersToLowercase ] = $value;
 				}
 			}
 		}
-		
+
 		$html = '';
-		
+
 		$course_list = new \ElatedfLMS\CPT\Shortcodes\Course\CourseList();
-		
+
 		$query_array                     = $course_list->getQueryArray( $shortcode_params );
 		$query_results                   = new \WP_Query( $query_array );
 		$shortcode_params['this_object'] = $course_list;
-		
+
 		$number_of_posts = 0;
-		
+
 		if ( $query_results->have_posts() ):
 			while ( $query_results->have_posts() ) : $query_results->the_post();
 				$number_of_posts ++;
@@ -1355,9 +1396,9 @@ if ( ! function_exists( 'eltdf_lms_course_ajax_load_more' ) ) {
 		else:
 			$html .= eltdf_lms_get_cpt_shortcode_module_template_part( 'course', 'parts/posts-not-found', '', $shortcode_params );
 		endif;
-		
+
 		wp_reset_postdata();
-		
+
 		$next_page      = $shortcode_params['next_page'];
 		$posts_per_page = $shortcode_params['number_of_items'];
 		$min_value      = ( $next_page - 1 ) * $posts_per_page + 1;
@@ -1368,13 +1409,13 @@ if ( ! function_exists( 'eltdf_lms_course_ajax_load_more' ) ) {
 		} else {
 			$max_value = $next_page * $posts_per_page;
 		}
-		
+
 		$return_obj = array(
 			'html'     => $html,
 			'minValue' => $min_value,
 			'maxValue' => $max_value,
 		);
-		
+
 		echo json_encode( $return_obj );
 		exit;
 	}
@@ -1394,15 +1435,15 @@ if ( ! function_exists( 'eltdf_lms_course_ratings' ) ) {
 			'2' => 0,
 			'1' => 0
 		);
-		
+
 		foreach ( $comment_array as $comment ) {
 			$rating = get_comment_meta( $comment->comment_ID, 'eltdf_rating', true );
-			
+
 			if ( $rating != '' && $rating != 0 ) {
 				$marks[ $rating ] = $marks[ $rating ] + 1;
 			}
 		}
-		
+
 		return $marks;
 	}
 }
@@ -1410,12 +1451,12 @@ if ( ! function_exists( 'eltdf_lms_course_ratings' ) ) {
 if ( ! function_exists( 'eltdf_lms_course_number_of_ratings' ) ) {
 	function eltdf_lms_course_number_of_ratings() {
 		$ratings = eltdf_lms_course_ratings();
-		
+
 		$count = 0;
 		foreach ( $ratings as $rating => $value ) {
 			$count = $count + $value;
 		}
-		
+
 		return $count;
 	}
 }
@@ -1425,14 +1466,14 @@ if ( ! function_exists( 'eltdf_lms_course_average_rating' ) ) {
 		$ratings = eltdf_lms_course_ratings();
 		$sum     = 0;
 		$count   = 0;
-		
+
 		foreach ( $ratings as $rating => $value ) {
 			$sum   = $sum + $rating * $value;
 			$count = $count + $value;
 		}
-		
+
 		$average = $count == 0 ? 0 : round( $sum / $count );
-		
+
 		return $average;
 	}
 }
@@ -1440,39 +1481,39 @@ if ( ! function_exists( 'eltdf_lms_course_average_rating' ) ) {
 if ( ! function_exists( 'eltdf_lms_complete_button' ) ) {
 	function eltdf_lms_complete_button( $params = array() ) {
 		$html = '';
-		
+
 		if ( eltdf_lms_user_has_course( $params['course_id'] ) ) {
 			$html               = eltdf_lms_cpt_single_module_template_part( 'templates/single/parts/complete-form', 'course', '', $params );
-			$user_status_values = eltdf_lms_get_user_courses_status(null,$params['course_id']);
-			
+			$user_status_values = eltdf_lms_get_user_courses_status( null, $params['course_id'] );
+
 			if ( ! empty( $user_status_values ) && array_key_exists( $params['course_id'], $user_status_values ) ) {
 				if ( in_array( $params['item_id'], $user_status_values[ $params['course_id'] ]['items_completed'] ) ) {
 					$message_html = '<p class="mkdf-lms-message">';
 					$message_html .= '<span class="lnr lnr-checkmark-circle"></span>';
 					$message_html .= '<span class="mkdf-lms-message-text">';
-					
+
 					$message = get_post_meta( $params['item_id'], 'mkdf_lesson_post_message_meta', true );
-					
+
 					if ( $message == '' ) {
 						$message_html .= esc_html__( 'Completed', 'mkdf-lms' );
 					} else {
 						$message_html .= $message;
 					}
-					
+
 					$message_html .= '</span>';
-					
+
 					$html = $message_html;
 				}
 			}
 		}
-		
+
 		return $html;
 	}
 }
 
 if ( ! function_exists( 'eltdf_lms_override_breadcrumbs' ) ) {
 	function eltdf_lms_override_breadcrumbs( $childContent, $delimiter, $before, $after ) {
-		
+
 		if ( is_tax( 'course-category', '' ) ) {
 			$childContent = '';
 			$terms        = get_terms( 'course-category' );
@@ -1487,24 +1528,24 @@ if ( ! function_exists( 'eltdf_lms_override_breadcrumbs' ) ) {
 						'link'      => true,
 						'inclusive' => false
 					);
-					
+
 					$parents = get_ancestors( $curent_term, 'course-category', 'taxonomy' );
-					
+
 					if ( $args['inclusive'] ) {
 						array_unshift( $parents, $curent_term );
 					}
-					
+
 					foreach ( array_reverse( $parents ) as $term_id ) {
 						$parent = get_term( $term_id, 'course-category' );
 						$name   = ( 'slug' === $args['format'] ) ? $parent->slug : $parent->name;
-						
+
 						if ( $args['link'] ) {
 							$childContent .= '<a href="' . esc_url( get_term_link( $parent->term_id, 'course-category' ) ) . '">' . $name . '</a>' . $args['separator'];
 						} else {
 							$childContent .= $name . $args['separator'];
 						}
 					}
-					
+
 					$childContent .= $before . $cat->name . $after;
 					break;
 				}
@@ -1524,9 +1565,9 @@ if ( ! function_exists( 'eltdf_lms_override_breadcrumbs' ) ) {
 			}
 			$childContent .= $before . get_the_title() . $after;
 		}
-		
+
 		return $childContent;
 	}
-	
+
 	add_filter( 'esmarts_elated_filter_breadcrumbs_title_child_output', 'eltdf_lms_override_breadcrumbs', 10, 4 );
 }

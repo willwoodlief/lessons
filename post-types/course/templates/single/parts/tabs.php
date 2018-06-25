@@ -8,7 +8,7 @@ if ( ! empty( $tabs ) ) :
 			<?php foreach ( $tabs as $key => $tab ) : ?>
 				<?php if ( isset( $tab['link'] ) ) { ?>
 				<li class="eltdf-custom-tab-link">
-					<a class="eltdf-external-link" href="<?php echo esc_attr( $tab['link'] ); ?>">
+					<a class="eltdf-external-link" href="<?php echo esc_attr( $tab['link'] ); ?>" <?= apply_filters( 'ecomhub_fi_get_link_attributes', $tab['link']  ); ?>>
 				<?php } else { ?>
 				<li class="<?php echo esc_attr( $key ); ?>_tab">
 					<a href="#tab-<?php echo esc_attr( $key ); ?>">
