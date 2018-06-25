@@ -1235,7 +1235,7 @@ if ( ! function_exists( 'ecomhub_fi_return_link_attributes' ) ) {
 			//see if owns
 			$b_owns = ecomhub_fi_safe_does_own_any_courses(get_current_user_id());
 			if (!$b_owns) {
-				$ret = " disabled style='pointer-events: none;color: #d0d0d0' onclick='function(e) {e.preventDefault(); return false;}' ";
+				$ret = " disabled style='display:none;pointer-events: none;color: #d0d0d0' onclick='function(e) {e.preventDefault(); return false;}' ";
 			}
 		}
 		return $ret;
