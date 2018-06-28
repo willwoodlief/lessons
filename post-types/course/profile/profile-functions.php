@@ -131,6 +131,9 @@ if ( ! function_exists( 'ecomhub_fi_user_section_progress' ) ) {
 
 			//check for keywords in section name
 			$b_has_word = (stripos($section_name, 'free') !== false ) ? true: false;
+			if (!$b_has_word) {
+				$b_has_word = (stripos($section_name, 'resources') !== false ) ? true: false;
+			}
 
 			if ($b_has_word) {
 				$node = ['is_readable'=> true, 'is_locked' => false, 'human'=>"Contains unlock word, will always be unlocked"];
