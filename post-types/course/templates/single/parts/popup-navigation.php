@@ -7,7 +7,8 @@ $next_item_id = ( array_key_exists( $current_id + 1, $items ) ) ? $items[ $curre
 $section_lookup = ecomhub_fi_course_items_section_lookup($course_id);
 $prev_section = $section_lookup[$prev_item_id];
 $next_section = $section_lookup[$next_item_id];
-$unlocks = ecomhub_fi_user_section_progress(get_current_user_id(),$course_id);
+$course_sections = get_post_meta( $course_id, 'eltdf_course_curriculum', true );
+$unlocks = ecomhub_fi_user_section_progress(get_current_user_id(),$course_id,$course_sections);
 $prev_unlock = $unlocks[$prev_section];
 if ( $prev_unlock &&  $prev_unlock['is_locked']) {
 	$prev_item_id = '';

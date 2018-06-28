@@ -2,7 +2,7 @@
 $course_sections        = get_post_meta( get_the_ID(), 'eltdf_course_curriculum', true );
 $course_curriculum_desc = get_post_meta( get_the_ID(), 'eltdf_course_curriculum_desc_meta', true );
 if ( ! empty( $course_sections ) ) {
-	$unlocks         = ecomhub_fi_user_section_progress( get_current_user_id() );
+	$unlocks         = ecomhub_fi_user_section_progress( get_current_user_id(),null,$course_sections );
 	$section_counter = 0;
 	?>
     <div class="eltdf-course-curriculum">

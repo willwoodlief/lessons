@@ -56,12 +56,18 @@ if ( ! function_exists( 'ecomhub_fi_user_section_progress' ) ) {
 	 * returns 0 based index of section unlocked, as well as the seconds until next unlock
 	 * @param integer $user_id
 	 * @param string $id
+	 * @param array $course_sections_input, in order array of all the sections, we are looking at the section_name
 	 *
 	 * @return array section id numbered: {is_readable, is_locked: boolean, human: string of time duration }
 	 */
-	function ecomhub_fi_user_section_progress( $user_id,$id = '' ) {
-		$id               = $id === '' ? get_the_ID() : $id;
+	function ecomhub_fi_user_section_progress( $user_id,$id , array $course_sections_input = [] ) {
+		$id               = $id  ? $id : get_the_ID();
 
+		$course_sections = [];
+		//redo course_sections
+		foreach ($course_sections_input as $section) {
+			$course_sections[] = $section;
+		}
 
 		// do the whitelist stuff
 		$ecom_fi_options = get_option( 'ecomhub_fi_options' );
@@ -101,8 +107,17 @@ if ( ! function_exists( 'ecomhub_fi_user_section_progress' ) ) {
 		$ret = [];
 		// if start < 0 then is_readable is false and is_locked = true and human is "Need to Purchase"
 		// if on whitelist then is_readable is true and is_locked = false and human = ''
+		$first_sections_count = 0; //counts sections that are not free
+		$real_section_count = -1;
 		for($u = 0; $u < 100; $u++) {
 			$node = ['is_readable'=> false, 'is_locked' => true, 'human'=>"Need to Purchase Course"];
+			$section_name = '';
+			if (is_array($course_sections) && (count($course_sections) > $u)) {
+				$section_name = $course_sections[$u]['section_name'];
+			}
+
+
+
 			if ($start < 0 && !$b_is_whitelisted)  {
 				$ret[] = $node;
 				continue;
@@ -114,14 +129,26 @@ if ( ! function_exists( 'ecomhub_fi_user_section_progress' ) ) {
 				continue;
 			}
 
-			//if got here then the person has a start timestamp >=0 , make the first two sections unlocked right away
-			if ($u < 2) {
-				$node = ['is_readable'=> true, 'is_locked' => false, 'human'=>"First two sections unlocked always"];
+			//check for keywords in section name
+			$b_has_word = (stripos($section_name, 'free') !== false ) ? true: false;
+
+			if ($b_has_word) {
+				$node = ['is_readable'=> true, 'is_locked' => false, 'human'=>"Contains unlock word, will always be unlocked"];
 				$ret[] = $node;
 				continue;
 			}
+			$real_section_count ++;
+			//if got here then the person has a start timestamp >=0 , make the first two sections unlocked right away
+			if ($first_sections_count < 2) {
+				$node = ['is_readable'=> true, 'is_locked' => false, 'human'=>"First two sections unlocked always"];
+				$ret[] = $node;
+				$first_sections_count ++;
+				continue;
+			}
+
+
 			$node = [];
-			$section_unlocked_at_week = $u -1 ; // the week after the start timestamp the section is unlocked at,
+			$section_unlocked_at_week = $real_section_count -1 ; // the week after the start timestamp the section is unlocked at,
 			// 0 means starting week, 1 is the week after that, 2 is two weeks after that etc
 
 
