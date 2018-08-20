@@ -944,6 +944,95 @@ if ( ! function_exists( 'ecomhub_fi_course_items_section_lookup' ) ) {
 	}
 }
 
+
+if ( ! function_exists( 'ecomhub_fi_course_get_instructors' ) ) {
+	/**
+	 * @param string $id
+	 *
+	 * @return array of instructor post ids
+	 */
+	function ecomhub_fi_course_get_instructors( $id = '' ) {
+		global $wpdb;
+		$instructor_post_ids = [];
+		$course_id       = strval( $id != '' ? $id : get_the_ID() );
+		$names = ecomhub_fi_get_instructor_course_array();
+
+		if (!array_key_exists($course_id,$names)) {
+			return $instructor_post_ids;
+		}
+		$instructors = $names[$course_id];
+		$like_queries = [];
+		$like_values = [];
+		foreach ($instructors as $name) {
+			$like_queries[]= 'post_title LIKE %s';
+			$like_values[] =  '%'.$name.'%';
+		}
+		if (empty($like_queries)) {return $instructor_post_ids;}
+
+		$like_string = implode(' OR ',$like_queries);
+		$search_query = 'SELECT ID FROM wp_posts
+                         WHERE post_type = "instructor" 
+                         AND ( ' . $like_string . ' )';
+
+
+		$results = $wpdb->get_results($wpdb->prepare($search_query, $like_values), OBJECT);
+		foreach($results as $key => $obj){
+			$instructor_post_ids[] = $obj->ID;
+		}
+		return $instructor_post_ids;
+	}
+}
+
+if ( ! function_exists( 'ecomhub_fi_get_instructor_course_array' ) ) {
+	/**
+	 *
+	 *
+	 * @return array
+	 */
+	function ecomhub_fi_get_instructor_course_array(  ) {
+		$names = [
+			'59' => ['Will Woodlief','Andy Wharhal','Mary Poppins'],
+			'62' => ['Will Woodlief'],
+			'845' => ['Tom Wang','David Zaleski'],
+			'6677' => ['Tom Wang','David Zaleski','Jayden Maharaj']
+		];
+
+		return $names;
+	}
+}
+
+if ( ! function_exists( 'ecomhub_fi_single_instructor_get_courses' ) ) {
+	/**
+	 * @param string $instructor_id
+	 *
+	 * @return array (lesson id => section index 0 based)
+	 */
+	function ecomhub_fi_single_instructor_get_courses( $instructor_id  ) {
+
+		$names = ecomhub_fi_get_instructor_course_array();
+		$instructor_name = get_the_title( $instructor_id );
+		//go through names, and build up a hash with instructor's name
+		$courses = [];
+		foreach ($names as $course_id => $array_names) {
+			foreach ($array_names as $an_instructor) {
+				if (strcasecmp($an_instructor,$instructor_name) === 0) {
+					$courses[] = $course_id;
+				}
+			}
+		}
+
+
+
+		$course_sc_params                      = array();
+		$course_sc_params['type']              = 'gallery';
+		$course_sc_params['number_of_columns'] = '3';
+		$course_sc_params['selected_courses']  = implode( ',', $courses );
+
+		return $course_sc_params;
+	}
+}
+
+
 if ( ! function_exists( 'eltdf_lms_course_is_preview_available' ) ) {
 	function eltdf_lms_course_is_preview_available( $id ) {
 		$free_lesson      = get_post_meta( $id, 'eltdf_lesson_free_meta', true );

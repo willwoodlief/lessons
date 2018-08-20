@@ -1,6 +1,7 @@
 <?php
+// we turned off course categories in the header bar, and are now printing them in the course-features
 $categories = wp_get_post_terms( get_the_ID(), 'course-category' );
-if ( is_array( $categories ) && count( $categories ) ) :
+if ( false && is_array( $categories ) && count( $categories ) ) :
 	?>
 	<div class="eltdf-grid-col-4">
 		<div class="eltdf-course-categories">

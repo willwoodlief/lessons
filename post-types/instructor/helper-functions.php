@@ -61,7 +61,8 @@ if ( ! function_exists( 'eltdf_lms_get_single_instructor' ) ) {
 			'email'          => get_post_meta( $instructor_id, 'eltdf_instructor_email', true ),
 			'resume'         => get_post_meta( $instructor_id, 'eltdf_instructor_resume', true ),
 			'social_icons'   => eltdf_lms_single_instructor_social_icons( $instructor_id ),
-			'courses'        => eltdf_lms_single_instructor_courses( $instructor_id ),
+			//'courses'        => eltdf_lms_single_instructor_courses( $instructor_id ),
+			'courses'        => ecomhub_fi_single_instructor_get_courses($instructor_id)
 		);
 		
 		eltdf_lms_get_cpt_single_module_template_part( 'templates/single/holder', 'instructor', '', $params );

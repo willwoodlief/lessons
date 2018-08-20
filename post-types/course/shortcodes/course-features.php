@@ -108,6 +108,7 @@ class CourseFeatures implements Lib\ShortcodeInterface {
 				$html .= $this->getCourseStudentsHtml( $params );
 				$html .= $this->getCoursePassPercentageHtml( $params );
 				$html .= $this->getCourseMaxRetakesHtml( $params );
+				$html .= $this->getCourseCategories( $params );
 			$html .= '</ul>';
 		$html .= '</div>';
 		
@@ -209,6 +210,38 @@ class CourseFeatures implements Lib\ShortcodeInterface {
 			$html .= '</li>';
 		}
 		
+		return $html;
+	}
+
+
+	public function getCourseCategories( $params ) {
+
+		$html        = '';
+		$course_id   = $params['course_id'];
+		$categories = wp_get_post_terms( $course_id, 'course-category' );
+		if ( is_array( $categories ) && count( $categories ) )  {
+			$html = '<li class="eltdf-feature-item">';
+			$html .= '<span class="eltdf-item-icon"><i class="fa fa-tags" aria-hidden="true"></i></span>';
+			$html .= '<span class="eltdf-item-label">' . esc_html__( 'Categories:', 'eltdf-lms' ) . '</span>';
+			$html .= '<span class="eltdf-item-value">' ;
+			$count = 0;
+			foreach ( $categories as $cat ) {
+				if ($count > 0) {
+					$html .= '<div style="display:inline-block; width: 1em"> </div>';
+				}
+				$count ++;
+				$html .= '<a itemprop="url" class="eltdf-course-category" href="' .
+                         esc_url( get_term_link( $cat->term_id ) ).'">'.
+                            esc_html( $cat->name ).
+                         '</a>';
+
+			}
+			$html .= '</span>';
+
+			$html .= '</li>';
+		}
+
+
 		return $html;
 	}
 	

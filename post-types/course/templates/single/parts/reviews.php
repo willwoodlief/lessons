@@ -1,7 +1,7 @@
 <?php if ( comments_open() ) { ?>
 	<div class="eltdf-grid-col-4">
 		<div class="eltdf-course-reviews">
-			<div class="eltdf-course-reviews-label">
+			<div class="eltdf-course-reviews-label" style="font-size: 18px">
 				<?php esc_html_e( 'Reviews:', 'eltdf-lms' ) ?>
 			</div>
 			<span class="eltdf-course-stars">
