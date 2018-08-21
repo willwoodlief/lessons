@@ -970,9 +970,10 @@ if ( ! function_exists( 'ecomhub_fi_course_get_instructors' ) ) {
 		if (empty($like_queries)) {return $instructor_post_ids;}
 
 		$like_string = implode(' OR ',$like_queries);
-		$search_query = 'SELECT ID FROM wp_posts
-                         WHERE post_type = "instructor" 
-                         AND ( ' . $like_string . ' )';
+		$post_table = $wpdb->base_prefix . 'posts';
+		$search_query = "SELECT ID FROM $post_table
+                         WHERE post_type = 'instructor' 
+                         AND ( " . $like_string . " )";
 
 
 		$results = $wpdb->get_results($wpdb->prepare($search_query, $like_values), OBJECT);
