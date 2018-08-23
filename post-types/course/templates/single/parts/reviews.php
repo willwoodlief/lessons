@@ -1,7 +1,18 @@
 <?php if ( comments_open() ) { ?>
-	<div class="eltdf-grid-col-4">
-		<div class="eltdf-course-reviews">
-			<div class="eltdf-course-reviews-label" style="font-size: 18px">
+
+    <?php
+        $divider_style = '';
+        if ( eltdf_lms_is_woocommerce_installed() ) {
+	        $user_has_course = eltdf_lms_user_has_course();
+	        $user_completed_prerequired = eltdf_lms_user_completed_prerequired_course();
+	        if ($user_has_course && $user_completed_prerequired) {
+		        $divider_style = 'border-right: 1px solid #ebebeb';
+            }
+        }
+    ?>
+    <div class="eltdf-grid-col-4">
+		<div class="eltdf-course-reviews" style="<?php echo $divider_style?>">
+			<div class="eltdf-course-reviews-label" >
 				<?php esc_html_e( 'Reviews:', 'eltdf-lms' ) ?>
 			</div>
 			<span class="eltdf-course-stars">

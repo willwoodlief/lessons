@@ -108,7 +108,7 @@ class CourseFeatures implements Lib\ShortcodeInterface {
 				$html .= $this->getCourseStudentsHtml( $params );
 				$html .= $this->getCoursePassPercentageHtml( $params );
 				$html .= $this->getCourseMaxRetakesHtml( $params );
-				$html .= $this->getCourseCategories( $params );
+		//		$html .= $this->getCourseCategories( $params );
 			$html .= '</ul>';
 		$html .= '</div>';
 		
