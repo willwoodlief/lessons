@@ -32,7 +32,7 @@
 	            </span>
 
 	                <span class="eltdf-instructor-name">
-	                    <?php echo implode(" , ",$instructor_parts) ?>
+	                    <?php echo implode(", ",$instructor_parts) ?>
 	                </span>
 
             </div>
