@@ -134,6 +134,9 @@ if ( ! function_exists( 'ecomhub_fi_user_section_progress' ) ) {
 			if (!$b_has_word) {
 				$b_has_word = (stripos($section_name, 'resources') !== false ) ? true: false;
 			}
+			if (!$b_has_word) {
+				$b_has_word = (stripos($section_name, 'section') !== false ) ? true: false;
+			}
 
 			if ($b_has_word) {
 				$node = ['is_readable'=> true, 'is_locked' => false, 'human'=>"Contains unlock word, will always be unlocked"];
