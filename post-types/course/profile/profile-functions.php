@@ -275,7 +275,8 @@ if ( ! function_exists( 'eltdf_lms_user_has_course' ) ) {
 						$start_times = [];
 					}
 
-					if (!array_key_exists($product_id,$start_times)) {
+					if (!array_key_exists($product_id,$start_times) || (empty($start_times[ $product_id ])) || (intval($start_times[ $product_id ]) <= 0) ) {
+
 						$start_times[$product_id] = time() ;
 						update_user_meta( get_current_user_id(), 'ecomhub_fi_user_start_course', $start_times );
 					}
